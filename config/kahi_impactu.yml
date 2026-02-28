@@ -1,0 +1,998 @@
+config:
+  database_url: localhost
+  database_name: kahi
+  log_database: kahi
+  log_collection: log
+  profile: False
+workflow:
+  doaj_sources:
+    database_url: localhost:27017
+    database_name: doaj_2025_2
+    collection_name: stage
+    verbose: 4
+  scimago_sources:
+    file_path:
+      - scimago/scimagojr 1999.csv
+      - scimago/scimagojr 2000.csv
+      - scimago/scimagojr 2001.csv
+      - scimago/scimagojr 2002.csv
+      - scimago/scimagojr 2003.csv
+      - scimago/scimagojr 2004.csv
+      - scimago/scimagojr 2005.csv
+      - scimago/scimagojr 2006.csv
+      - scimago/scimagojr 2007.csv
+      - scimago/scimagojr 2008.csv
+      - scimago/scimagojr 2009.csv
+      - scimago/scimagojr 2010.csv
+      - scimago/scimagojr 2011.csv
+      - scimago/scimagojr 2012.csv
+      - scimago/scimagojr 2013.csv
+      - scimago/scimagojr 2014.csv
+      - scimago/scimagojr 2015.csv
+      - scimago/scimagojr 2016.csv
+      - scimago/scimagojr 2017.csv
+      - scimago/scimagojr 2018.csv
+      - scimago/scimagojr 2019.csv
+      - scimago/scimagojr 2020.csv
+      - scimago/scimagojr 2021.csv
+      - scimago/scimagojr 2022.csv
+      - scimago/scimagojr 2023.csv
+      - scimago/scimagojr 2024.csv
+      - scimago/scimagojr 2025.csv
+  scienti_sources:
+    databases:
+      - database_url: localhost:27017
+        database_name: scienti_udea_2024
+        collection_name: product
+      - database_url: localhost:27017
+        database_name: scienti_uec_2024
+        collection_name: product
+      - database_url: localhost:27017
+        database_name: scienti_unaula_2024
+        collection_name: product
+      - database_url: localhost:27017
+        database_name: scienti_univalle_2024
+        collection_name: product
+  openalex_sources:
+    database_url: localhost:27017
+    database_name: openalexco
+    collection_name: sources
+    num_jobs: 72
+  openalex_subjects:
+    database_url: localhost:27017
+    database_name: openalexco
+    collection_name: concepts
+    num_jobs: 72
+  ror_affiliations:
+    database_url: localhost:27017
+    database_name: ror_2025_2
+    collection_name: stage
+    num_jobs: 72
+  openalex_affiliations:
+    database_url: localhost:27017
+    database_name: openalexco
+    collection_name: institutions
+    num_jobs: 72
+  staff_affiliations:
+    databases:
+      - institution_id: https://ror.org/03bp5hc83 #Universidad de Antioquia (could be any external id ex: ROR_ID, GRID_ID, etc)
+        file_path: staff/formato_talento_humano_udea_2024_11.xlsx
+      - institution_id: https://ror.org/00jb9vg53 #Universidad del Valle
+        file_path: staff/formato_talento_humano_univalle_2024_11.xlsx
+      - institution_id: https://ror.org/05tkb8v92 #Universidad Autónoma Latinoamericana
+        file_path: staff/formato_talento_humano_unaula_2025_03.xlsx
+      - institution_id: https://ror.org/02xtwpk10 # Universidad Externado de Colombia
+        file_path: staff/formato_talento_humano_uec_2024_11.xlsx
+    verbose: 4
+  wikidata_affiliations:
+    database_name: wikidata #i did the run over the full wikidata
+    collection_name: data
+    num_jobs: 72
+    verbose: 4
+  scienti_affiliations:
+    databases:
+      - database_url: localhost:27017
+        database_name: scienti_udea_2024
+        collection_name: product
+      - database_url: localhost:27017
+        database_name: scienti_uec_2024
+        collection_name: product
+      - database_url: localhost:27017
+        database_name: scienti_unaula_2024
+        collection_name: product
+      - database_url: localhost:27017
+        database_name: scienti_univalle_2024
+        collection_name: product
+    verbose: 4
+  minciencias_opendata_affiliations:
+      database_url: localhost:27017
+      database_name: yuku_2025_2
+      collection_name: gruplac_groups_data
+      num_jobs: 72
+      verbose: 4
+  staff_person:
+    databases:
+      - institution_id: https://ror.org/03bp5hc83 # Universidad de Antioquia
+        staff_file_path: staff/formato_talento_humano_udea_2024_11.xlsx
+        ciarp_file_path: staff/formato_CIARP_UDEA_2024_11.xlsx # required for related works
+      - institution_id: https://ror.org/00jb9vg53 # Universidad del Valle
+        staff_file_path: staff/formato_talento_humano_univalle_2024_11.xlsx
+        ciarp_file_path: staff/formato_CIARP_UNIVALLE_2024.xlsx # required for related works
+      - institution_id: https://ror.org/059yx9a68 # Universidad Nacional de Colombia
+        staff_file_path: staff/formato_talento_humano_unal_2025_02.xlsx
+        ciarp_file_path: staff/formato_CIARP_UNAL_2025_02.xlsx # required for related works
+      - institution_id: https://ror.org/05tkb8v92 #Universidad Autónoma Latinoamericana
+        staff_file_path: staff/formato_talento_humano_unaula_2025_03.xlsx
+      - institution_id: https://ror.org/02xtwpk10 # Universidad Externado de Colombia
+        staff_file_path: staff/formato_talento_humano_uec_2024_11.xlsx
+    verbose: 4
+  scienti_person:
+     databases:
+       - database_url: localhost:27017
+         database_name: scienti_udea_2024
+         collection_name: product
+       - database_url: localhost:27017
+         database_name: scienti_uec_2024
+         collection_name: product
+       - database_url: localhost:27017
+         database_name: scienti_unaula_2024
+         collection_name: product
+       - database_url: localhost:27017
+         database_name: scienti_univalle_2024
+         collection_name: product
+     verbose: 2
+  minciencias_opendata_person:
+    database_url: localhost:27017
+    database_name: yuku_2025_2
+    researchers: cvlac_data
+    cvlac: cvlac_stage
+    groups_production: gruplac_production_data
+    private_profiles: cvlac_stage_private
+    cvlac_html_profiles: cvlac_stage_raw
+    num_jobs: 1
+    verbose: 4
+  openalex_person:
+    database_url: localhost:27017
+    database_name: openalexco
+    collection_name: authors
+    collection_name_works: works # required for related works
+    num_jobs: 72
+    verbose: 4
+  orcid_person:
+    num_jobs: 72
+    verbose: 2
+    database_url: localhost:27017
+    database_name: orcid
+    collection_name: summaries
+  scholar_person:
+    num_jobs: 72
+    verbose: 4
+    database_url: localhost:27017
+    database_name: scholar_colombia_2024
+    collection_name: stage
+  unicity_person:
+    collection_name: person
+    max_authors_threshold: 20
+    num_jobs: 1
+    verbose: 5
+    task:
+      - scienti
+      - orcid
+      - scholar
+      - scopus
+      - researchgate
+      - doi
+# ##############################
+# # Clening es before indexing #
+# ##############################
+  elasticsearch_works/delete:
+    es_index: kahi_es_works # Change index for kahi_dev_2
+    es_url: http://localhost:9200
+    es_user: elastic
+    es_password: colav
+    task: delete
+    bulk_size: 100
+    debug: true
+    verbose: 5
+  # #######
+  # works #
+  # #######
+  openalex_works/doi:
+    database_url: localhost:27017
+    database_name: openalexco
+    collection_name: works
+    num_jobs: 48
+    backend: "multiprocessing"
+    verbose: 1
+  scienti_works/doi:
+     databases:
+       - database_url: localhost:27017
+         database_name: scienti_udea_2024
+         collection_name: product
+       - database_url: localhost:27017
+         database_name: scienti_uec_2024
+         collection_name: product
+       - database_url: localhost:27017
+         database_name: scienti_unaula_2024
+         collection_name: product
+       - database_url: localhost:27017
+         database_name: scienti_univalle_2024
+         collection_name: product
+     num_jobs: 72
+     verbose: 1
+  ciarp_works/doi:
+     databases:
+       - institution_id: https://ror.org/03bp5hc83 # Universidad de Antioquia
+         file_path: /storage/kahi_data/kahi_data/staff/formato_CIARP_UDEA_2024_11.xlsx
+       - institution_id: https://ror.org/059yx9a68 # Universidad Nacional de Colombia
+         file_path: /storage/kahi_data/kahi_data/staff/formato_CIARP_UNAL_2025_02.xlsx
+       - institution_id: https://ror.org/00jb9vg53 # Universidad del Valle
+         file_path: /storage/kahi_data/kahi_data/staff/formato_CIARP_UNIVALLE_2024.xlsx #NO HAY DOIS
+       - institution_id: https://ror.org/059yx9a68 # Universidad Nacional de Colombia
+         file_path: /storage/kahi_data/kahi_data/staff/formato_CIARP_UNAL_2025_02.xlsx
+     num_jobs: 1
+     verbose: 4
+  scholar_works/doi:
+     database_url: localhost:27017
+     database_name: scholar_colombia_2024
+     collection_name: stage
+     num_jobs: 72
+     verbose: 5
+  dspace_works/doi:
+      database_url: localhost:27017
+      database_name: oxomoc_colombia
+      num_jobs: 72
+      verbose: 0
+      repositories:
+        - institution_id: 'https://ror.org/00gm52g34' # COLEGIO DE ESTUDIOS SUPERIORES DE ADMINISTRACION-CESA-
+          collection_name: dspace_cesa_records
+          repository_url: https://repository.cesa.edu.co
+        - institution_id: 'https://ror.org/02h1b1x27' # UNIVERSIDAD DE LOS ANDES
+          collection_name: dspace_uniandes_records
+          repository_url: https://repositorio.uniandes.edu.co
+        - institution_id: 'https://ror.org/01v5nhr20' # CORPORACION UNIVERSIDAD DE LA COSTA CUC
+          collection_name: dspace_cuc_records
+          repository_url: https://repositorio.cuc.edu.co
+        - institution_id: 'https://ror.org/05kaxtp50' # UNIVERSIDAD CATOLICA DE MANIZALES
+          collection_name: dspace_ucm_records
+          repository_url: https://repositorio.ucm.edu.co
+        - institution_id: 'https://ror.org/03e55jv37' # FUNDACION UNIVERSITARIA-CEIPA-
+          collection_name: dspace_ceipa_records
+          repository_url: https://repositorio.ceipa.edu.co
+        - institution_id: 'https://ror.org/023m5rq87' # UNIVERSIDAD PEDAGOGICA NACIONAL
+          collection_name: dspace_pedagogica_records
+          repository_url: http://repositorio.pedagogica.edu.co
+        - institution_id: 'https://ror.org/059yx9a68' # UNIVERSIDAD NACIONAL DE COLOMBIA
+          collection_name: dspace_unal_records
+          repository_url: https://repositorio.unal.edu.co
+        - institution_id: 'https://ror.org/04vdmbk59' # UNIVERSIDAD PEDAGOGICA Y TECNOLOGICA DE COLOMBIA - UPTC
+          collection_name: dspace_uptc_records
+          repository_url: https://repositorio.uptc.edu.co
+        - institution_id: 'https://ror.org/031n6w191' # UNIVERSIDAD DE MANIZALES
+          collection_name: dspace_umanizales_records
+          repository_url: https://ridum.umanizales.edu.co
+        - institution_id: 'https://ror.org/029ccny38' # UNIVERSIDAD CATOLICA DE PEREIRA
+          collection_name: dspace_ucp_records
+          repository_url: https://repositorio.ucp.edu.co
+        - institution_id: 'https://ror.org/04wwz3282' # UNIVERSIDAD EIA
+          collection_name: dspace_eia_records
+          repository_url: https://repository.eia.edu.co
+        - institution_id: 'https://ror.org/04zwxg371' # CORPORACION UNIVERSITARIA REMINGTON
+          collection_name: dspace_uniremington_records
+          repository_url: https://repositorio.uniremington.edu.co
+        - institution_id: 'https://ror.org/01jc1nc57' # CORPORACION UNIVERSITARIA DEL HUILA-CORHUILA-
+          collection_name: dspace_corhuila_records
+          repository_url: https://dspace.corhuila.edu.co
+        - institution_id: 'https://ror.org/01vf7gd47' # UNIVERSIDAD ECCI
+          collection_name: dspace_ecci_records
+          repository_url: https://repositorio.ecci.edu.co
+        - institution_id: 'https://ror.org/03qngxd77' # CORPORACION ESCUELA TECNOLOGICA DEL ORIENTE
+          collection_name: dspace_artesaniasdecolombia_records
+          repository_url: https://repositorio.artesaniasdecolombia.com.co
+        - institution_id: 'https://ror.org/02t54e151' # UNIVERSIDAD ICESI
+          collection_name: dspace_icesi_records
+          repository_url: https://repository.icesi.edu.co
+        - institution_id: 'https://ror.org/0409zd934' # UNIVERSIDAD DE CARTAGENA
+          collection_name: dspace_unicartagena_records
+          repository_url: https://repositorio.unicartagena.edu.co
+        - institution_id: 'https://ror.org/040tqqd15' # UNIVERSIDAD DE CUNDINAMARCA-UDEC
+          collection_name: dspace_ucundinamarca_records
+          repository_url: https://repositorio.ucundinamarca.edu.co
+        - institution_id: 'https://ror.org/03mx33742' # UNIVERSIDAD DE SANTANDER - UDES
+          collection_name: dspace_udes_records
+          repository_url: https://repositorio.udes.edu.co
+        - institution_id: 'https://ror.org/02r1xtk47' # CORPORACION UNIVERSITARIA DEL META - UNIMETA
+          collection_name: dspace_unimeta_records
+          repository_url: https://repositorio.unimeta.edu.co
+        - institution_id: 'https://ror.org/00cey1j90' # UNIVERSIDAD METROPOLITANA
+          collection_name: dspace_ibero_records
+          repository_url: https://repositorio.ibero.edu.co
+        - institution_id: 'https://ror.org/007k0m436' # CORPORACION UNIVERSITARIA COMFACAUCA - UNICOMFACAUCA
+          collection_name: dspace_unicomfacauca_records
+          repository_url: https://repositorio.unicomfacauca.edu.co
+        - institution_id: 'https://ror.org/049n68p64' # UNIVERSIDAD DE CALDAS
+          collection_name: dspace_ucaldas_records
+          repository_url: https://repositorio.ucaldas.edu.co
+        - institution_id: 'https://ror.org/04pzf5g91' # UNIVERSIDAD DE IBAGUE
+          collection_name: dspace_unibague_records
+          repository_url: https://repositorio.unibague.edu.co
+        - institution_id: 'https://ror.org/01r5afm23' # UNIVERSIDAD LA GRAN COLOMBIA
+          collection_name: dspace_ugc_records
+          repository_url: https://repository.ugc.edu.co
+        - institution_id: 'https://ror.org/00s9vmn82' # TECNOLOGICO DE ANTIOQUIA
+          collection_name: dspace_tdea_records
+          repository_url: https://dspace.tdea.edu.co
+        - institution_id: 'https://ror.org/03zb5p722' # INSTITUTO TECNOLOGICO METROPOLITANO
+          collection_name: dspace_itm_records
+          repository_url: https://repositorio.itm.edu.co
+        - institution_id: 'https://ror.org/042335e16' # UNIVERSIDAD DE LOS LLANOS
+          collection_name: dspace_unillanos_records
+          repository_url: https://repositorio.unillanos.edu.co
+        - institution_id: 'https://ror.org/02xw8cw23' # UNIVERSIDAD DEL VALLE
+          collection_name: dspace_univalle_records
+          repository_url: https://bibliotecadigital.univalle.edu.co
+        - institution_id: 'https://ror.org/05ynctv81' # CORPORACION UNIVERSITARIA LASALLISTA
+          collection_name: dspace_unilasallista_records
+          repository_url: https://repository.unilasallista.edu.co
+        - institution_id: 'https://ror.org/04thy0g29' # UNIVERSITARIA AGUSTINIANA- UNIAGUSTINIANA
+          collection_name: dspace_uniagustiniana_records
+          repository_url: https://repositorio.uniagustiniana.edu.co
+        - institution_id: 'https://ror.org/01vwm8t51' # UNIVERSIDAD FRANCISCO DE PAULA SANTANDER
+          collection_name: dspace_ufps_records
+          repository_url: https://repositorio.ufps.edu.co
+        - institution_id: 'https://ror.org/01pe78696' # UNIVERSIDAD DEL ATLANTICO
+          collection_name: dspace_uac_records
+          repository_url: http://repositorio.uac.edu.co
+        - institution_id: 'https://ror.org/000xmhb57' # UNIVERSIDAD INCCA DE COLOMBIA
+          collection_name: dspace_car_records
+          repository_url: https://sie.car.gov.co
+        - institution_id: 'https://ror.org/011bqgx84' # UNIVERSIDAD DEL TOLIMA
+          collection_name: dspace_ut_records
+          repository_url: https://repository.ut.edu.co
+        - institution_id: 'https://ror.org/00gkhpw57' # UNIVERSIDAD AUTONOMA DE BUCARAMANGA-UNAB-
+          collection_name: dspace_unab_records
+          repository_url: https://repository.unab.edu.co
+        - institution_id: 'https://ror.org/01358s213' # UNIVERSIDAD DEL QUINDIO
+          collection_name: dspace_uniquindio_records
+          repository_url: https://bdigital.uniquindio.edu.co
+        - institution_id: 'https://ror.org/05dyy5830' # CORPORACION UNIVERSITARIA  UNITEC
+          collection_name: dspace_unitec_records
+          repository_url: https://repositorio.unitec.edu.co
+        - institution_id: 'https://ror.org/03etyjw28' # PONTIFICIA UNIVERSIDAD JAVERIANA
+          collection_name: dspace_javeriana_records
+          repository_url: https://repository.javeriana.edu.co
+        - institution_id: 'https://ror.org/01wsvqj37' # ESCUELA NACIONAL DEL DEPORTE
+          collection_name: dspace_endeporte_records
+          repository_url: https://repositorio.endeporte.edu.co
+        - institution_id: 'https://ror.org/00xc1d948' # UNIVERSIDAD INDUSTRIAL DE SANTANDER
+          collection_name: dspace_uis_records
+          repository_url: https://noesis.uis.edu.co
+        - institution_id: 'https://ror.org/02yr3f298' # FUNDACION UNIVERSITARIA EMPRESARIAL DE LA CAMARA DE COMERCIO DE BOGOTA- UNIEMPRESARIAL
+          collection_name: dspace_ccb_records
+          repository_url: https://bibliotecadigital.ccb.org.co
+        - institution_id: 'https://ror.org/04nmbd607' # UNIVERSIDAD DE CORDOBA
+          collection_name: dspace_unicordoba_records
+          repository_url: https://repositorio.unicordoba.edu.co
+        - institution_id: 'https://ror.org/02drkkh02' # UNIVERSIDAD AUTONOMA DE OCCIDENTE
+          collection_name: dspace_uao_records
+          repository_url: https://red.uao.edu.co
+        - institution_id: 'https://ror.org/01d171k92' # UNIVERSIDAD TECNOLOGICA DE BOLIVAR
+          collection_name: dspace_utb_records
+          repository_url: https://repositorio.utb.edu.co
+        - institution_id: 'https://ror.org/01h2taq97' # UNIVERSIDAD DE CIENCIAS APLICADAS Y AMBIENTALES - UDCA
+          collection_name: dspace_udca_records
+          repository_url: https://repository.udca.edu.co
+        - institution_id: 'https://ror.org/01x03t965' # FUNDACI\xD3N UNIVERSITARIA COMPENSAR
+          collection_name: dspace_ucompensar_records
+          repository_url: https://repositoriocrai.ucompensar.edu.co
+        - institution_id: 'https://ror.org/03ca7a577' # FUNDACION UNIVERSITARIA KONRAD LORENZ
+          collection_name: dspace_konradlorenz_records
+          repository_url: https://repositorio.konradlorenz.edu.co
+        - institution_id: 'https://ror.org/04cjjhh62' # UNIVERSIDAD DE LA GUAJIRA
+          collection_name: dspace_uniguajira_records
+          repository_url: https://repositoryinst.uniguajira.edu.co
+        - institution_id: 'https://ror.org/052c3jb45' # FUNDACION CENTRO UNIVERSITARIO DE BIENESTAR RURAL
+          collection_name: dspace_uniajc_records
+          repository_url: https://repositorio.uniajc.edu.co
+        - institution_id: 'https://ror.org/0108mwc04' # Universidad del Rosario
+          collection_name: dspace_urosario_records
+          repository_url: https://repository.urosario.edu.co
+        - institution_id: 'https://ror.org/03m5f7m65' # CORPORACION UNIVERSIDAD PILOTO DE COLOMBIA
+          collection_name: dspace_unipiloto_records
+          repository_url: https://repository.unipiloto.edu.co
+        - institution_id: 'https://ror.org/04m9gzq43' # UNIVERSIDAD EL BOSQUE
+          collection_name: dspace_unbosque_records
+          repository_url: https://repositorio.unbosque.edu.co
+        - institution_id: 'https://ror.org/04kbsj707' # ESCUELA TECNOLOGICA INSTITUTO TECNICO CENTRAL
+          collection_name: dspace_itc_records
+          repository_url: https://repositorio.itc.edu.co
+        - institution_id: 'https://ror.org/01scwqh06' # UNIVERSIDAD CATOLICA DE COLOMBIA
+          collection_name: dspace_ucatolica_records
+          repository_url: https://repository.ucatolica.edu.co
+        - institution_id: 'https://ror.org/04fbb7514' # UNIVERSIDAD DE SUCRE
+          collection_name: dspace_unisucre_records
+          repository_url: https://repositorio.unisucre.edu.co
+        - institution_id: 'https://ror.org/05jj6ma85' # INSTITUCION UNIVERSITARIA DE ENVIGADO
+          collection_name: dspace_iue_records
+          repository_url: https://bibliotecadigital.iue.edu.co
+        - institution_id: 'https://ror.org/04fybn584' # UNIVERSIDAD DEL CAUCA
+          collection_name: dspace_unicauca_records
+          repository_url: http://repositorio.unicauca.edu.co:8080
+        - institution_id: 'https://ror.org/01d981710' # UNIVERSIDAD TECNOLOGICA DE PEREIRA - UTP
+          collection_name: dspace_utp_records
+          repository_url: https://repositorio.utp.edu.co
+        - institution_id: 'https://ror.org/02jsxd428' # UNIVERSIDAD DISTRITAL-FRANCISCO JOSE DE CALDAS
+          collection_name: dspace_udistrital_records
+          repository_url: https://repository.udistrital.edu.co
+        - institution_id: 'https://ror.org/031e6xm45' # UNIVERSIDAD DEL NORTE
+          collection_name: dspace_uninorte_records
+          repository_url: https://manglar.uninorte.edu.co
+        - institution_id: 'https://ror.org/02yr3f298' # FUNDACION UNIVERSITARIA DE CIENCIAS DE LA SALUD
+          collection_name: dspace_fucsalud_records
+          repository_url: https://repositorio.fucsalud.edu.co
+        - institution_id: 'https://ror.org/02xtwpk10' # UNIVERSIDAD EXTERNADO DE COLOMBIA
+          collection_name: dspace_uexternado_records
+          repository_url: https://bdigital.uexternado.edu.co
+        - institution_id: 'https://ror.org/01yz56j89' # SERVICIO NACIONAL DE APRENDIZAJE-SENA-
+          collection_name: dspace_sena_records
+          repository_url: https://repositorio.sena.edu.co
+        - institution_id: 'https://ror.org/037p13h95' # UNIVERSIDAD CES
+          collection_name: dspace_ces_records
+          repository_url: https://repository.ces.edu.co
+        - institution_id: 'https://ror.org/04wbzgn90' # FUNDACION UNIVERSIDAD DE BOGOTA - JORGE TADEO LOZANO
+          collection_name: dspace_utadeo_records
+          repository_url: https://expeditiorepositorio.utadeo.edu.co
+        - institution_id: 'https://ror.org/02ckere89' # UNIVERSIDAD SERGIO ARBOLEDA
+          collection_name: dspace_usergioarboleda_records
+          repository_url: https://repository.usergioarboleda.edu.co
+        - institution_id: 'https://ror.org/00kt2hh26' # FUNDACION UNIVERSITARIA AGRARIA DE COLOMBIA -UNIAGRARIA-
+          collection_name: dspace_uniagraria_records
+          repository_url: https://repository.uniagraria.edu.co
+        - institution_id: 'https://ror.org/047179s14' # UNIVERSIDAD NACIONAL ABIERTA Y A DISTANCIA UNAD
+          collection_name: dspace_unad_records
+          repository_url: https://repository.unad.edu.co
+        - institution_id: 'https://ror.org/00ffq6216' # UNIDAD CENTRAL DEL VALLE DEL CAUCA
+          collection_name: dspace_uceva_records
+          repository_url: https://repositorio.uceva.edu.co
+        - institution_id: 'https://ror.org/01nxen694' # UNIVERSIDAD ESCUELA COLOMBIANA DE INGENIERIA JULIO GARAVITO
+          collection_name: dspace_escuelaing_records
+          repository_url: https://repositorio.escuelaing.edu.co
+        - institution_id: 'https://ror.org/05tkb8v92' # Universidad Aut\xF3noma Latinoamericana'
+          collection_name: dspace_unaula_records
+          repository_url: http://repositorio.unaula.edu.co:4000
+        - institution_id: 'https://ror.org/02sqgkj21' # UNIVERSIDAD DE LA SABANA
+          collection_name: dspace_unisabana_records
+          repository_url: https://intellectum.unisabana.edu.co
+        - institution_id: 'https://ror.org/01hb6tn62' # FUNDACION UNIVERSITARIA DEL AREA ANDINA
+          collection_name: dspace_areandina_records
+          repository_url: https://digitk.areandina.edu.co
+        - institution_id: 'https://ror.org/051xvqh87' # FUNDACION UNIVERSITARIA CATOLICA DEL NORTE
+          collection_name: dspace_ucn_records
+          repository_url: https://repositorio.ucn.edu.co
+        - institution_id: 'https://ror.org/04axvmf19' # CORPORACI\xD3N UNIFICADA HISPANOAMERICANA DE EDUCACI\xD3N SUPERIOR
+          collection_name: dspace_cun_records
+          repository_url: https://repositorio.cun.edu.co
+        - institution_id: 'https://ror.org/02fcfe885' # ESCUELA SUPERIOR DE GUERRA GENERAL RAFAEL REYES PRIETO
+          collection_name: dspace_esdegrepositorio_records
+          repository_url: https://www.esdegrepositorio.edu.co
+        - institution_id: 'https://ror.org/042ewz993' # UNIVERSIDAD DE BOYACA UNIBOYACA
+          collection_name: dspace_uniboyaca_records
+          repository_url: https://repositorio.uniboyaca.edu.co
+        - institution_id: 'https://ror.org/02604an77' # FUNDACION ESCUELA COLOMBIANA DE REHABILITACION
+          collection_name: dspace_ecr_records
+          repository_url: https://repositorio.ecr.edu.co
+        - institution_id: 'https://ror.org/02pzxyp49' # UNIVERSIDAD CATOLICA DE ORIENTE -UCO
+          collection_name: dspace_uco_records
+          repository_url: https://repositorio.uco.edu.co
+        - institution_id: 'https://ror.org/056g73y51' # POLITECNICO COLOMBIANO JAIME ISAZA CADAVID
+          collection_name: dspace_elpoli_records
+          repository_url: https://repositorio.elpoli.edu.co
+        - institution_id: 'https://ror.org/00edtwv66' # Secretaría de Educación del Distrito Capital
+          collection_name: dspace_educacionbogota_records
+          repository_url: https://repositoriosed.educacionbogota.edu.co
+        - institution_id: 'https://ror.org/03jhhfg57' # CORPORACION UNIVERSITARIA ADVENTISTA - UNAC
+          collection_name: dspace_unac_records
+          repository_url: https://repository.unac.edu.co
+        - institution_id: 'https://ror.org/030kw0b65' # UNIVERSIDAD DE MEDELLIN
+          collection_name: dspace_udem_records
+          repository_url: https://repository.udem.edu.co
+        - institution_id: 'https://ror.org/00n7m6g17' # POLITECNICO GRANCOLOMBIANO
+          collection_name: dspace_poligran_records
+          repository_url: https://alejandria.poligran.edu.co
+        - institution_id: 'https://ror.org/01bm9xh88' # CORPORACION UNIVERSITARIA DEL CARIBE - CECAR
+          collection_name: dspace_cecar_records
+          repository_url: https://repositorio.cecar.edu.co
+        - institution_id: 'https://ror.org/055mabf46' # UNIVERSIDAD-COLEGIO MAYOR DE CUNDINAMARCA
+          collection_name: dspace_unicolmayor_records
+          repository_url: https://repositorio.unicolmayor.edu.co
+        - institution_id: 'https://ror.org/03p7h8068' # FUNDACION UNIVERSITARIA DE POPAYAN
+          collection_name: dspace_fumc_records
+          repository_url: https://repositorio.fumc.edu.co
+        - institution_id: 'https://ror.org/03e79yx85' # INSTITUTO TOLIMENSE DE FORMACION TECNICA PROFESIONAL
+          collection_name: dspace_itfip_records
+          repository_url: https://repositorio.itfip.edu.co
+        - institution_id: 'https://ror.org/02vbtzd72' # UNIVERSIDAD SANTO TOMAS
+          collection_name: dspace_usta_records
+          repository_url: https://repository.usta.edu.co
+        - institution_id: 'https://ror.org/04td15k45' # UNIVERSIDAD COOPERATIVA DE COLOMBIA
+          collection_name: dspace_ucc_records
+          repository_url: https://repository.ucc.edu.co
+        - institution_id: 'https://ror.org/0289gr697' # INSTITUCI\xD3N UNIVERSITARIA MAYOR DE CARTAGENA'
+          collection_name: dspace_unimayor_records
+          repository_url: https://repositorio.unimayor.edu.co
+        - institution_id: 'https://ror.org/04sqpjb51' # UNIVERSIDAD DE SAN BUENAVENTURA
+          collection_name: dspace_usb_records
+          repository_url: https://bibliotecadigital.usb.edu.co
+        - institution_id: 'https://ror.org/03bp5hc83' # UNIVERSIDAD DE ANTIOQUIA
+          collection_name: dspace_udea_records
+          repository_url: https://bibliotecadigital.udea.edu.co
+        - institution_id: 'https://ror.org/05pm0vd24' # FUNDACION UNIVERSITARIA LOS LIBERTADORES
+          collection_name: dspace_libertadores_records
+          repository_url: https://repository.libertadores.edu.co
+        - institution_id: 'https://ror.org/04yk0nx57' # FUNDACI\xD3N UNIVERSITARIA JUAN N. CORPAS
+          collection_name: dspace_juanncorpas_records
+          repository_url: https://repositorio.juanncorpas.edu.co
+        - institution_id: 'https://ror.org/04s60rj63' # UNIVERSIDAD SURCOLOMBIANA
+          collection_name: dspace_minciencias_records
+          repository_url: https://repositorio.minciencias.gov.co
+        - institution_id: 'https://ror.org/00kcjks51' # FUNDACION UNIVERSIDAD DE AMERICA
+          collection_name: dspace_uamerica_records
+          repository_url: https://repository.uamerica.edu.co
+        - institution_id: 'https://ror.org/02beve479' # UNIVERSIDAD DE LA SALLE
+          collection_name: dspace_lasalle_records
+          repository_url: https://ciencia.lasalle.edu.co
+        - institution_id: 'https://ror.org/0034jpk25' # INSTITUTO UNIVERSITARIO DE LA PAZ
+          collection_name: dspace_universidadean_records
+          repository_url: https://repository.universidadean.edu.co
+        - institution_id: 'https://ror.org/01shra089' # BANCO DE LA REPÚBLICA COLOMBIA
+          collection_name: dspace_banrep_records
+          repository_url: https://repositorio.banrep.gov.co
+        - institution_id: 'https://repositorio.redinvestigadores.org' # RED INVESTIGADORES ECONOMIA COLOMBIA (sin ROR)
+          collection_name: dspace_redinvcol_records
+          repository_url: https://repositorio.redinvestigadores.org
+
+  ################
+  # creating es  #
+  ################
+  elasticsearch_works/bulk_insert:
+    es_index: kahi_es_works # Change index for kahi_dev_3
+    es_url: http://localhost:9200
+    es_user: elastic
+    es_password: colav
+    task: bulk_insert
+    bulk_size: 500
+    debug: true
+    verbose: 2
+################
+# works no doi #
+################
+  openalex_works:
+    database_url: localhost:27017
+    database_name: openalexco
+    collection_name: works
+    num_jobs: 72
+    es_index: kahi_es_works
+    es_url: http://localhost:9200
+    es_user: elastic
+    es_password: colav
+    #backend: "multiprocessing" # options are joblib options
+    backend: "threading" # options are joblib options
+    verbose: 2
+  scienti_works:
+    es_index: kahi_es_works
+    es_url: http://localhost:9200
+    es_user: elastic
+    es_password: colav
+    databases:
+      - database_url: localhost:27017
+        database_name: scienti_udea_2024
+        collection_name: product
+      - database_url: localhost:27017
+        database_name: scienti_uec_2024
+        collection_name: product
+      - database_url: localhost:27017
+        database_name: scienti_unaula_2024
+        collection_name: product
+      - database_url: localhost:27017
+        database_name: scienti_univalle_2024
+        collection_name: product
+    num_jobs: 72
+    verbose: 2
+  ciarp_works:
+    es_index: kahi_es_works
+    es_url: http://localhost:9200
+    es_user: elastic
+    es_password: colav
+    databases:
+      - institution_id: https://ror.org/03bp5hc83 # Universidad de Antioquia
+        file_path: /storage/kahi_data/kahi_data/staff/formato_CIARP_UDEA_2024_11.xlsx
+      - institution_id: https://ror.org/059yx9a68 # Universidad Nacional de Colombia
+        file_path: /storage/kahi_data/kahi_data/staff/formato_CIARP_UNAL_2025_02.xlsx
+      - institution_id: https://ror.org/00jb9vg53 # Universidad del Valle
+        file_path: /storage/kahi_data/kahi_data/staff/formato_CIARP_UNIVALLE_2024.xlsx #NO HAY DOIS
+      - institution_id: https://ror.org/059yx9a68 # Universidad Nacional de Colombia
+        file_path: /storage/kahi_data/kahi_data/staff/formato_CIARP_UNAL_2025_02.xlsx
+    num_jobs: 1
+    verbose: 2
+  scholar_works:
+    database_url: localhost:27017
+    database_name: scholar_colombia_2024
+    collection_name: stage
+    es_index: kahi_es_works
+    es_url: http://localhost:9200
+    es_user: elastic
+    es_password: colav
+    num_jobs: 72
+    verbose: 2
+  minciencias_opendata_works:
+    es_index: kahi_es_works
+    es_url: http://localhost:9200
+    es_user: elastic
+    es_password: colav
+    database_url: localhost:27017
+    database_name: yuku_2025_2
+    collection_name: gruplac_production_data
+    insert_all: True
+    num_jobs: 72
+    verbose: 1
+  dspace_works:
+      database_url: localhost:27017
+      database_name: oxomoc_colombia
+      num_jobs: 72
+      verbose: 0
+      es_index: kahi_es_works
+      es_url: http://localhost:9200
+      es_user: elastic
+      es_password: colav
+      thresholds: [65, 90, 95]
+      repositories:
+        - institution_id: 'https://ror.org/00gm52g34' # COLEGIO DE ESTUDIOS SUPERIORES DE ADMINISTRACION-CESA-
+          collection_name: dspace_cesa_records
+          repository_url: https://repository.cesa.edu.co
+        - institution_id: 'https://ror.org/02h1b1x27' # UNIVERSIDAD DE LOS ANDES
+          collection_name: dspace_uniandes_records
+          repository_url: https://repositorio.uniandes.edu.co
+        - institution_id: 'https://ror.org/01v5nhr20' # CORPORACION UNIVERSIDAD DE LA COSTA CUC
+          collection_name: dspace_cuc_records
+          repository_url: https://repositorio.cuc.edu.co
+        - institution_id: 'https://ror.org/05kaxtp50' # UNIVERSIDAD CATOLICA DE MANIZALES
+          collection_name: dspace_ucm_records
+          repository_url: https://repositorio.ucm.edu.co
+        - institution_id: 'https://ror.org/03e55jv37' # FUNDACION UNIVERSITARIA-CEIPA-
+          collection_name: dspace_ceipa_records
+          repository_url: https://repositorio.ceipa.edu.co
+        - institution_id: 'https://ror.org/023m5rq87' # UNIVERSIDAD PEDAGOGICA NACIONAL
+          collection_name: dspace_pedagogica_records
+          repository_url: http://repositorio.pedagogica.edu.co
+        - institution_id: 'https://ror.org/059yx9a68' # UNIVERSIDAD NACIONAL DE COLOMBIA
+          collection_name: dspace_unal_records
+          repository_url: https://repositorio.unal.edu.co
+        - institution_id: 'https://ror.org/04vdmbk59' # UNIVERSIDAD PEDAGOGICA Y TECNOLOGICA DE COLOMBIA - UPTC
+          collection_name: dspace_uptc_records
+          repository_url: https://repositorio.uptc.edu.co
+        - institution_id: 'https://ror.org/031n6w191' # UNIVERSIDAD DE MANIZALES
+          collection_name: dspace_umanizales_records
+          repository_url: https://ridum.umanizales.edu.co
+        - institution_id: 'https://ror.org/029ccny38' # UNIVERSIDAD CATOLICA DE PEREIRA
+          collection_name: dspace_ucp_records
+          repository_url: https://repositorio.ucp.edu.co
+        - institution_id: 'https://ror.org/04wwz3282' # UNIVERSIDAD EIA
+          collection_name: dspace_eia_records
+          repository_url: https://repository.eia.edu.co
+        - institution_id: 'https://ror.org/04zwxg371' # CORPORACION UNIVERSITARIA REMINGTON
+          collection_name: dspace_uniremington_records
+          repository_url: https://repositorio.uniremington.edu.co
+        - institution_id: 'https://ror.org/01jc1nc57' # CORPORACION UNIVERSITARIA DEL HUILA-CORHUILA-
+          collection_name: dspace_corhuila_records
+          repository_url: https://dspace.corhuila.edu.co
+        - institution_id: 'https://ror.org/01vf7gd47' # UNIVERSIDAD ECCI
+          collection_name: dspace_ecci_records
+          repository_url: https://repositorio.ecci.edu.co
+        - institution_id: 'https://ror.org/03qngxd77' # CORPORACION ESCUELA TECNOLOGICA DEL ORIENTE
+          collection_name: dspace_artesaniasdecolombia_records
+          repository_url: https://repositorio.artesaniasdecolombia.com.co
+        - institution_id: 'https://ror.org/02t54e151' # UNIVERSIDAD ICESI
+          collection_name: dspace_icesi_records
+          repository_url: https://repository.icesi.edu.co
+        - institution_id: 'https://ror.org/0409zd934' # UNIVERSIDAD DE CARTAGENA
+          collection_name: dspace_unicartagena_records
+          repository_url: https://repositorio.unicartagena.edu.co
+        - institution_id: 'https://ror.org/040tqqd15' # UNIVERSIDAD DE CUNDINAMARCA-UDEC
+          collection_name: dspace_ucundinamarca_records
+          repository_url: https://repositorio.ucundinamarca.edu.co
+        - institution_id: 'https://ror.org/03mx33742' # UNIVERSIDAD DE SANTANDER - UDES
+          collection_name: dspace_udes_records
+          repository_url: https://repositorio.udes.edu.co
+        - institution_id: 'https://ror.org/02r1xtk47' # CORPORACION UNIVERSITARIA DEL META - UNIMETA
+          collection_name: dspace_unimeta_records
+          repository_url: https://repositorio.unimeta.edu.co
+        - institution_id: 'https://ror.org/00cey1j90' # UNIVERSIDAD METROPOLITANA
+          collection_name: dspace_ibero_records
+          repository_url: https://repositorio.ibero.edu.co
+        - institution_id: 'https://ror.org/007k0m436' # CORPORACION UNIVERSITARIA COMFACAUCA - UNICOMFACAUCA
+          collection_name: dspace_unicomfacauca_records
+          repository_url: https://repositorio.unicomfacauca.edu.co
+        - institution_id: 'https://ror.org/049n68p64' # UNIVERSIDAD DE CALDAS
+          collection_name: dspace_ucaldas_records
+          repository_url: https://repositorio.ucaldas.edu.co
+        - institution_id: 'https://ror.org/04pzf5g91' # UNIVERSIDAD DE IBAGUE
+          collection_name: dspace_unibague_records
+          repository_url: https://repositorio.unibague.edu.co
+        - institution_id: 'https://ror.org/01r5afm23' # UNIVERSIDAD LA GRAN COLOMBIA
+          collection_name: dspace_ugc_records
+          repository_url: https://repository.ugc.edu.co
+        - institution_id: 'https://ror.org/00s9vmn82' # TECNOLOGICO DE ANTIOQUIA
+          collection_name: dspace_tdea_records
+          repository_url: https://dspace.tdea.edu.co
+        - institution_id: 'https://ror.org/03zb5p722' # INSTITUTO TECNOLOGICO METROPOLITANO
+          collection_name: dspace_itm_records
+          repository_url: https://repositorio.itm.edu.co
+        - institution_id: 'https://ror.org/042335e16' # UNIVERSIDAD DE LOS LLANOS
+          collection_name: dspace_unillanos_records
+          repository_url: https://repositorio.unillanos.edu.co
+        - institution_id: 'https://ror.org/02xw8cw23' # UNIVERSIDAD DEL VALLE
+          collection_name: dspace_univalle_records
+          repository_url: https://bibliotecadigital.univalle.edu.co
+        - institution_id: 'https://ror.org/05ynctv81' # CORPORACION UNIVERSITARIA LASALLISTA
+          collection_name: dspace_unilasallista_records
+          repository_url: https://repository.unilasallista.edu.co
+        - institution_id: 'https://ror.org/04thy0g29' # UNIVERSITARIA AGUSTINIANA- UNIAGUSTINIANA
+          collection_name: dspace_uniagustiniana_records
+          repository_url: https://repositorio.uniagustiniana.edu.co
+        - institution_id: 'https://ror.org/01vwm8t51' # UNIVERSIDAD FRANCISCO DE PAULA SANTANDER
+          collection_name: dspace_ufps_records
+          repository_url: https://repositorio.ufps.edu.co
+        - institution_id: 'https://ror.org/01pe78696' # UNIVERSIDAD DEL ATLANTICO
+          collection_name: dspace_uac_records
+          repository_url: http://repositorio.uac.edu.co
+        - institution_id: 'https://ror.org/000xmhb57' # UNIVERSIDAD INCCA DE COLOMBIA
+          collection_name: dspace_car_records
+          repository_url: https://sie.car.gov.co
+        - institution_id: 'https://ror.org/011bqgx84' # UNIVERSIDAD DEL TOLIMA
+          collection_name: dspace_ut_records
+          repository_url: https://repository.ut.edu.co
+        - institution_id: 'https://ror.org/00gkhpw57' # UNIVERSIDAD AUTONOMA DE BUCARAMANGA-UNAB-
+          collection_name: dspace_unab_records
+          repository_url: https://repository.unab.edu.co
+        - institution_id: 'https://ror.org/01358s213' # UNIVERSIDAD DEL QUINDIO
+          collection_name: dspace_uniquindio_records
+          repository_url: https://bdigital.uniquindio.edu.co
+        - institution_id: 'https://ror.org/05dyy5830' # CORPORACION UNIVERSITARIA  UNITEC
+          collection_name: dspace_unitec_records
+          repository_url: https://repositorio.unitec.edu.co
+        - institution_id: 'https://ror.org/03etyjw28' # PONTIFICIA UNIVERSIDAD JAVERIANA
+          collection_name: dspace_javeriana_records
+          repository_url: https://repository.javeriana.edu.co
+        - institution_id: 'https://ror.org/01wsvqj37' # ESCUELA NACIONAL DEL DEPORTE
+          collection_name: dspace_endeporte_records
+          repository_url: https://repositorio.endeporte.edu.co
+        - institution_id: 'https://ror.org/00xc1d948' # UNIVERSIDAD INDUSTRIAL DE SANTANDER
+          collection_name: dspace_uis_records
+          repository_url: https://noesis.uis.edu.co
+        - institution_id: 'https://ror.org/02yr3f298' # FUNDACION UNIVERSITARIA EMPRESARIAL DE LA CAMARA DE COMERCIO DE BOGOTA- UNIEMPRESARIAL
+          collection_name: dspace_ccb_records
+          repository_url: https://bibliotecadigital.ccb.org.co
+        - institution_id: 'https://ror.org/04nmbd607' # UNIVERSIDAD DE CORDOBA
+          collection_name: dspace_unicordoba_records
+          repository_url: https://repositorio.unicordoba.edu.co
+        - institution_id: 'https://ror.org/02drkkh02' # UNIVERSIDAD AUTONOMA DE OCCIDENTE
+          collection_name: dspace_uao_records
+          repository_url: https://red.uao.edu.co
+        - institution_id: 'https://ror.org/01d171k92' # UNIVERSIDAD TECNOLOGICA DE BOLIVAR
+          collection_name: dspace_utb_records
+          repository_url: https://repositorio.utb.edu.co
+        - institution_id: 'https://ror.org/01h2taq97' # UNIVERSIDAD DE CIENCIAS APLICADAS Y AMBIENTALES - UDCA
+          collection_name: dspace_udca_records
+          repository_url: https://repository.udca.edu.co
+        - institution_id: 'https://ror.org/01x03t965' # FUNDACI\xD3N UNIVERSITARIA COMPENSAR
+          collection_name: dspace_ucompensar_records
+          repository_url: https://repositoriocrai.ucompensar.edu.co
+        - institution_id: 'https://ror.org/03ca7a577' # FUNDACION UNIVERSITARIA KONRAD LORENZ
+          collection_name: dspace_konradlorenz_records
+          repository_url: https://repositorio.konradlorenz.edu.co
+        - institution_id: 'https://ror.org/04cjjhh62' # UNIVERSIDAD DE LA GUAJIRA
+          collection_name: dspace_uniguajira_records
+          repository_url: https://repositoryinst.uniguajira.edu.co
+        - institution_id: 'https://ror.org/052c3jb45' # FUNDACION CENTRO UNIVERSITARIO DE BIENESTAR RURAL
+          collection_name: dspace_uniajc_records
+          repository_url: https://repositorio.uniajc.edu.co
+        - institution_id: 'https://ror.org/0108mwc04' # Universidad del Rosario
+          collection_name: dspace_urosario_records
+          repository_url: https://repository.urosario.edu.co
+        - institution_id: 'https://ror.org/03m5f7m65' # CORPORACION UNIVERSIDAD PILOTO DE COLOMBIA
+          collection_name: dspace_unipiloto_records
+          repository_url: https://repository.unipiloto.edu.co
+        - institution_id: 'https://ror.org/04m9gzq43' # UNIVERSIDAD EL BOSQUE
+          collection_name: dspace_unbosque_records
+          repository_url: https://repositorio.unbosque.edu.co
+        - institution_id: 'https://ror.org/04kbsj707' # ESCUELA TECNOLOGICA INSTITUTO TECNICO CENTRAL
+          collection_name: dspace_itc_records
+          repository_url: https://repositorio.itc.edu.co
+        - institution_id: 'https://ror.org/01scwqh06' # UNIVERSIDAD CATOLICA DE COLOMBIA
+          collection_name: dspace_ucatolica_records
+          repository_url: https://repository.ucatolica.edu.co
+        - institution_id: 'https://ror.org/04fbb7514' # UNIVERSIDAD DE SUCRE
+          collection_name: dspace_unisucre_records
+          repository_url: https://repositorio.unisucre.edu.co
+        - institution_id: 'https://ror.org/05jj6ma85' # INSTITUCION UNIVERSITARIA DE ENVIGADO
+          collection_name: dspace_iue_records
+          repository_url: https://bibliotecadigital.iue.edu.co
+        - institution_id: 'https://ror.org/04fybn584' # UNIVERSIDAD DEL CAUCA
+          collection_name: dspace_unicauca_records
+          repository_url: http://repositorio.unicauca.edu.co:8080
+        - institution_id: 'https://ror.org/01d981710' # UNIVERSIDAD TECNOLOGICA DE PEREIRA - UTP
+          collection_name: dspace_utp_records
+          repository_url: https://repositorio.utp.edu.co
+        - institution_id: 'https://ror.org/02jsxd428' # UNIVERSIDAD DISTRITAL-FRANCISCO JOSE DE CALDAS
+          collection_name: dspace_udistrital_records
+          repository_url: https://repository.udistrital.edu.co
+        - institution_id: 'https://ror.org/031e6xm45' # UNIVERSIDAD DEL NORTE
+          collection_name: dspace_uninorte_records
+          repository_url: https://manglar.uninorte.edu.co
+        - institution_id: 'https://ror.org/02yr3f298' # FUNDACION UNIVERSITARIA DE CIENCIAS DE LA SALUD
+          collection_name: dspace_fucsalud_records
+          repository_url: https://repositorio.fucsalud.edu.co
+        - institution_id: 'https://ror.org/02xtwpk10' # UNIVERSIDAD EXTERNADO DE COLOMBIA
+          collection_name: dspace_uexternado_records
+          repository_url: https://bdigital.uexternado.edu.co
+        - institution_id: 'https://ror.org/01yz56j89' # SERVICIO NACIONAL DE APRENDIZAJE-SENA-
+          collection_name: dspace_sena_records
+          repository_url: https://repositorio.sena.edu.co
+        - institution_id: 'https://ror.org/037p13h95' # UNIVERSIDAD CES
+          collection_name: dspace_ces_records
+          repository_url: https://repository.ces.edu.co
+        - institution_id: 'https://ror.org/04wbzgn90' # FUNDACION UNIVERSIDAD DE BOGOTA - JORGE TADEO LOZANO
+          collection_name: dspace_utadeo_records
+          repository_url: https://expeditiorepositorio.utadeo.edu.co
+        - institution_id: 'https://ror.org/02ckere89' # UNIVERSIDAD SERGIO ARBOLEDA
+          collection_name: dspace_usergioarboleda_records
+          repository_url: https://repository.usergioarboleda.edu.co
+        - institution_id: 'https://ror.org/00kt2hh26' # FUNDACION UNIVERSITARIA AGRARIA DE COLOMBIA -UNIAGRARIA-
+          collection_name: dspace_uniagraria_records
+          repository_url: https://repository.uniagraria.edu.co
+        - institution_id: 'https://ror.org/047179s14' # UNIVERSIDAD NACIONAL ABIERTA Y A DISTANCIA UNAD
+          collection_name: dspace_unad_records
+          repository_url: https://repository.unad.edu.co
+        - institution_id: 'https://ror.org/00ffq6216' # UNIDAD CENTRAL DEL VALLE DEL CAUCA
+          collection_name: dspace_uceva_records
+          repository_url: https://repositorio.uceva.edu.co
+        - institution_id: 'https://ror.org/01nxen694' # UNIVERSIDAD ESCUELA COLOMBIANA DE INGENIERIA JULIO GARAVITO
+          collection_name: dspace_escuelaing_records
+          repository_url: https://repositorio.escuelaing.edu.co
+        - institution_id: 'https://ror.org/05tkb8v92' # Universidad Aut\xF3noma Latinoamericana'
+          collection_name: dspace_unaula_records
+          repository_url: http://repositorio.unaula.edu.co:4000
+        - institution_id: 'https://ror.org/02sqgkj21' # UNIVERSIDAD DE LA SABANA
+          collection_name: dspace_unisabana_records
+          repository_url: https://intellectum.unisabana.edu.co
+        - institution_id: 'https://ror.org/01hb6tn62' # FUNDACION UNIVERSITARIA DEL AREA ANDINA
+          collection_name: dspace_areandina_records
+          repository_url: https://digitk.areandina.edu.co
+        - institution_id: 'https://ror.org/051xvqh87' # FUNDACION UNIVERSITARIA CATOLICA DEL NORTE
+          collection_name: dspace_ucn_records
+          repository_url: https://repositorio.ucn.edu.co
+        - institution_id: 'https://ror.org/04axvmf19' # CORPORACI\xD3N UNIFICADA HISPANOAMERICANA DE EDUCACI\xD3N SUPERIOR
+          collection_name: dspace_cun_records
+          repository_url: https://repositorio.cun.edu.co
+        - institution_id: 'https://ror.org/02fcfe885' # ESCUELA SUPERIOR DE GUERRA GENERAL RAFAEL REYES PRIETO
+          collection_name: dspace_esdegrepositorio_records
+          repository_url: https://www.esdegrepositorio.edu.co
+        - institution_id: 'https://ror.org/042ewz993' # UNIVERSIDAD DE BOYACA UNIBOYACA
+          collection_name: dspace_uniboyaca_records
+          repository_url: https://repositorio.uniboyaca.edu.co
+        - institution_id: 'https://ror.org/02604an77' # FUNDACION ESCUELA COLOMBIANA DE REHABILITACION
+          collection_name: dspace_ecr_records
+          repository_url: https://repositorio.ecr.edu.co
+        - institution_id: 'https://ror.org/02pzxyp49' # UNIVERSIDAD CATOLICA DE ORIENTE -UCO
+          collection_name: dspace_uco_records
+          repository_url: https://repositorio.uco.edu.co
+        - institution_id: 'https://ror.org/056g73y51' # POLITECNICO COLOMBIANO JAIME ISAZA CADAVID
+          collection_name: dspace_elpoli_records
+          repository_url: https://repositorio.elpoli.edu.co
+        - institution_id: 'https://ror.org/00edtwv66' # Secretaría de Educación del Distrito Capital
+          collection_name: dspace_educacionbogota_records
+          repository_url: https://repositoriosed.educacionbogota.edu.co
+        - institution_id: 'https://ror.org/03jhhfg57' # CORPORACION UNIVERSITARIA ADVENTISTA - UNAC
+          collection_name: dspace_unac_records
+          repository_url: https://repository.unac.edu.co
+        - institution_id: 'https://ror.org/030kw0b65' # UNIVERSIDAD DE MEDELLIN
+          collection_name: dspace_udem_records
+          repository_url: https://repository.udem.edu.co
+        - institution_id: 'https://ror.org/00n7m6g17' # POLITECNICO GRANCOLOMBIANO
+          collection_name: dspace_poligran_records
+          repository_url: https://alejandria.poligran.edu.co
+        - institution_id: 'https://ror.org/01bm9xh88' # CORPORACION UNIVERSITARIA DEL CARIBE - CECAR
+          collection_name: dspace_cecar_records
+          repository_url: https://repositorio.cecar.edu.co
+        - institution_id: 'https://ror.org/055mabf46' # UNIVERSIDAD-COLEGIO MAYOR DE CUNDINAMARCA
+          collection_name: dspace_unicolmayor_records
+          repository_url: https://repositorio.unicolmayor.edu.co
+        - institution_id: 'https://ror.org/03p7h8068' # FUNDACION UNIVERSITARIA DE POPAYAN
+          collection_name: dspace_fumc_records
+          repository_url: https://repositorio.fumc.edu.co
+        - institution_id: 'https://ror.org/03e79yx85' # INSTITUTO TOLIMENSE DE FORMACION TECNICA PROFESIONAL
+          collection_name: dspace_itfip_records
+          repository_url: https://repositorio.itfip.edu.co
+        - institution_id: 'https://ror.org/02vbtzd72' # UNIVERSIDAD SANTO TOMAS
+          collection_name: dspace_usta_records
+          repository_url: https://repository.usta.edu.co
+        - institution_id: 'https://ror.org/04td15k45' # UNIVERSIDAD COOPERATIVA DE COLOMBIA
+          collection_name: dspace_ucc_records
+          repository_url: https://repository.ucc.edu.co
+        - institution_id: 'https://ror.org/0289gr697' # INSTITUCI\xD3N UNIVERSITARIA MAYOR DE CARTAGENA'
+          collection_name: dspace_unimayor_records
+          repository_url: https://repositorio.unimayor.edu.co
+        - institution_id: 'https://ror.org/04sqpjb51' # UNIVERSIDAD DE SAN BUENAVENTURA
+          collection_name: dspace_usb_records
+          repository_url: https://bibliotecadigital.usb.edu.co
+        - institution_id: 'https://ror.org/03bp5hc83' # UNIVERSIDAD DE ANTIOQUIA
+          collection_name: dspace_udea_records
+          repository_url: https://bibliotecadigital.udea.edu.co
+        - institution_id: 'https://ror.org/05pm0vd24' # FUNDACION UNIVERSITARIA LOS LIBERTADORES
+          collection_name: dspace_libertadores_records
+          repository_url: https://repository.libertadores.edu.co
+        - institution_id: 'https://ror.org/04yk0nx57' # FUNDACI\xD3N UNIVERSITARIA JUAN N. CORPAS
+          collection_name: dspace_juanncorpas_records
+          repository_url: https://repositorio.juanncorpas.edu.co
+        - institution_id: 'https://ror.org/04s60rj63' # UNIVERSIDAD SURCOLOMBIANA
+          collection_name: dspace_minciencias_records
+          repository_url: https://repositorio.minciencias.gov.co
+        - institution_id: 'https://ror.org/00kcjks51' # FUNDACION UNIVERSIDAD DE AMERICA
+          collection_name: dspace_uamerica_records
+          repository_url: https://repository.uamerica.edu.co
+        - institution_id: 'https://ror.org/02beve479' # UNIVERSIDAD DE LA SALLE
+          collection_name: dspace_lasalle_records
+          repository_url: https://ciencia.lasalle.edu.co
+        - institution_id: 'https://ror.org/0034jpk25' # INSTITUTO UNIVERSITARIO DE LA PAZ
+          collection_name: dspace_universidadean_records
+          repository_url: https://repository.universidadean.edu.co
+        - institution_id: 'https://ror.org/01shra089' # BANCO DE LA REPÚBLICA COLOMBIA
+          collection_name: dspace_banrep_records
+          repository_url: https://repositorio.banrep.gov.co
+        - institution_id: 'https://repositorio.redinvestigadores.org' # RED INVESTIGADORES ECONOMIA COLOMBIA (sin ROR)
+          collection_name: dspace_redinvcol_records
+          repository_url: https://repositorio.redinvestigadores.org
+## aditional entities
+  minciencias_opendata_events:
+     database_url: localhost:27017
+     database_name: yuku_2025_2
+     collection_name: gruplac_production_data
+     num_jobs: 72
+     verbose: 1
+  minciencias_opendata_projects:
+     database_url: localhost:27017
+     database_name: yuku_2025_2
+     collection_name: gruplac_production_data
+     num_jobs: 72
+     verbose: 1
+  minciencias_opendata_patents:
+     database_url: localhost:27017
+     database_name: yuku_2025_2
+     collection_name: gruplac_production_data
+     num_jobs: 1
+     verbose: 1
+  siiu_projects:
+     database_url: localhost:27017
+     database_name: siiu
+     collection_name: project
+     num_jobs: 20
+     verbose: 1
+  post_person_work_cleaning:
+     verbose: 2
+  post_cleanup_entities: # run this after all works plugins are done
+     num_jobs: 72
+     verbose: 2
+   #post calculations
+  impactu_post_cites_count:
+    verbose: 2
+    num_jobs: 72
+  impactu_postcalculations:
+    database_url: localhost:27017
+    database_name: kahi_calculations_dev
+    openalex_database_url: localhost:27017
+    openalex_database_name: openalexco
+    inference_endpoint: http://localhost:8080/invocations
+    backend: "multiprocessing"
+    n_jobs: 72
+    verbose: 2
+    author_count: 10 #use this with warning, maybe the network is too big and it can not be saved in MongoDB

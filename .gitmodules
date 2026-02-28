@@ -1,3 +1,12 @@
 [submodule "deps/Yuku"]
 	path = deps/Yuku
 	url = https://github.com/colav/Yuku.git
+[submodule "deps/kahi"]
+	path = deps/kahi
+	url = https://github.com/colav/kahi.git
+[submodule "deps/kahi_plugins"]
+	path = deps/kahi_plugins
+	url = https://github.com/colav/kahi_plugins.git
+[submodule "deps/kahi_impactu_utils"]
+	path = deps/kahi_impactu_utils
+	url = https://github.com/colav/kahi_impactu_utils.git

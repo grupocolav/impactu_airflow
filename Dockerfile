@@ -7,6 +7,9 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     build-essential \
     git \
+    python3-pybind11 \
+    pybind11-dev \
+    libhunspell-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
