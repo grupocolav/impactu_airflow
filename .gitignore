@@ -229,3 +229,6 @@ airflow.db
 airflow.db-*
 .airflow/
 ror_import/
+
+# Credentials / tokens
+*.pickle

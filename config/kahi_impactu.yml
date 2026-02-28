@@ -7,38 +7,14 @@ config:
 workflow:
   doaj_sources:
     database_url: localhost:27017
-    database_name: doaj_2025_2
+    database_name: doaj_2026_1
     collection_name: stage
     verbose: 4
   scimago_sources:
-    file_path:
-      - scimago/scimagojr 1999.csv
-      - scimago/scimagojr 2000.csv
-      - scimago/scimagojr 2001.csv
-      - scimago/scimagojr 2002.csv
-      - scimago/scimagojr 2003.csv
-      - scimago/scimagojr 2004.csv
-      - scimago/scimagojr 2005.csv
-      - scimago/scimagojr 2006.csv
-      - scimago/scimagojr 2007.csv
-      - scimago/scimagojr 2008.csv
-      - scimago/scimagojr 2009.csv
-      - scimago/scimagojr 2010.csv
-      - scimago/scimagojr 2011.csv
-      - scimago/scimagojr 2012.csv
-      - scimago/scimagojr 2013.csv
-      - scimago/scimagojr 2014.csv
-      - scimago/scimagojr 2015.csv
-      - scimago/scimagojr 2016.csv
-      - scimago/scimagojr 2017.csv
-      - scimago/scimagojr 2018.csv
-      - scimago/scimagojr 2019.csv
-      - scimago/scimagojr 2020.csv
-      - scimago/scimagojr 2021.csv
-      - scimago/scimagojr 2022.csv
-      - scimago/scimagojr 2023.csv
-      - scimago/scimagojr 2024.csv
-      - scimago/scimagojr 2025.csv
+    source_type: mongodb
+    scimago_database_url: localhost:27017
+    scimago_database: scimagojr
+    scimago_collection: scimagojr
   scienti_sources:
     databases:
       - database_url: localhost:27017

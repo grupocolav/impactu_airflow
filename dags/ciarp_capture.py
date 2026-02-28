@@ -538,7 +538,11 @@ def run_ciarp_capture(**kwargs: Any) -> None:
         "ciarp_drive_subfolder_name", default_var="ciarp"
     )
     dump_dir = params.get("dump_dir") or Variable.get("ciarp_dump_dir", default_var="")
-    google_token_pickle = params.get("google_token_pickle")
+    google_token_pickle = (
+        params.get("google_token_pickle")
+        or Variable.get("google_token_pickle", default_var="")
+        or os.environ.get("GOOGLE_TOKEN_PICKLE")
+    )
     cache_dir = params.get("cache_dir", "/tmp/impactu_airflow_cache/ciarp")
 
     force = _coerce_bool(params.get("force", False))

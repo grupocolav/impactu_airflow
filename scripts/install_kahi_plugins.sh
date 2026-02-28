@@ -2,11 +2,11 @@
 # install_kahi_plugins.sh — Install Kahi core and all Kahi plugins from local submodules.
 #
 # Usage:
-#   ./scripts/install_kahi_plugins.sh            # install everything
-#   ./scripts/install_kahi_plugins.sh --dev       # install in editable (dev) mode
-#   ./scripts/install_kahi_plugins.sh --plugin Kahi_doaj_sources  # install only one plugin
+#   ./scripts/install_kahi_plugins.sh --python .venv/bin/python   # install everything
+#   ./scripts/install_kahi_plugins.sh --python .venv/bin/python --dev
+#   ./scripts/install_kahi_plugins.sh --python .venv/bin/python --plugin Kahi_doaj_sources
 #
-# Requires: pip (from the active virtualenv / conda env)
+# Requires: uv (https://docs.astral.sh/uv/getting-started/installation/)
 
 set -euo pipefail
 
@@ -17,10 +17,15 @@ PLUGINS_DIR="$REPO_ROOT/deps/kahi_plugins"
 
 EDITABLE=false
 SINGLE_PLUGIN=""
+PYTHON_BIN=""
 
 # ── Parse arguments ────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
     case "$1" in
+        --python)
+            PYTHON_BIN="$2"
+            shift 2
+            ;;
         --dev|-e)
             EDITABLE=true
             shift
@@ -30,9 +35,10 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         -h|--help)
-            echo "Usage: $0 [--dev] [--plugin PLUGIN_NAME]"
+            echo "Usage: $0 --python <path> [--dev] [--plugin PLUGIN_NAME]"
             echo ""
-            echo "  --dev, -e         Install in editable mode (pip install -e)"
+            echo "  --python PATH     Path to Python interpreter (required)"
+            echo "  --dev, -e         Install in editable mode"
             echo "  --plugin, -p NAME Install only the specified plugin (e.g. Kahi_doaj_sources)"
             echo "  -h, --help        Show this help"
             exit 0
@@ -43,6 +49,12 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+if [[ -z "$PYTHON_BIN" ]]; then
+    echo "ERROR: --python <path> is required." >&2
+    echo "  Example: $0 --python .venv/bin/python" >&2
+    exit 1
+fi
 
 # ── Helpers ────────────────────────────────────────────────────────────────
 install_package() {
@@ -57,10 +69,10 @@ install_package() {
 
     if $EDITABLE; then
         echo "  📦 Installing $name (editable)..."
-        pip install -e "$pkg_dir" --quiet
+        uv pip install --python "$PYTHON_BIN" -e "$pkg_dir" --quiet
     else
         echo "  📦 Installing $name..."
-        pip install "$pkg_dir" --quiet
+        uv pip install --python "$PYTHON_BIN" "$pkg_dir" --quiet
     fi
 }
 
@@ -77,8 +89,9 @@ install_or_track() {
 }
 
 # ── Sanity checks ─────────────────────────────────────────────────────────
-if ! command -v pip &>/dev/null; then
-    echo "ERROR: pip not found. Activate a virtualenv or conda env first." >&2
+if ! command -v uv &>/dev/null; then
+    echo "ERROR: uv not found. Install it first:" >&2
+    echo "  curl -LsSf https://astral.sh/uv/install.sh | sh" >&2
     exit 1
 fi
 
@@ -141,8 +154,8 @@ if [[ ${#FAILED[@]} -gt 0 ]]; then
         echo "      - $f"
     done
     echo ""
-    echo "  Re-run with verbose pip to debug:"
-    echo "    pip install <plugin_dir>"
+    echo "  Re-run with verbose uv to debug:"
+    echo "    uv pip install --python $PYTHON_BIN <plugin_dir>"
     exit 1
 else
     echo "  ✘ Failed:    0"
