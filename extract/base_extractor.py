@@ -1,10 +1,17 @@
 """Base extractor module for ETL processes."""
 
 import logging
+import os
 from abc import ABC, abstractmethod
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any
 
+from bson import BSON
 from pymongo import MongoClient
+from pymongo.errors import PyMongoError
+
+UTC = getattr(datetime, "UTC", timezone(timedelta(0)))
 
 
 class BaseExtractor(ABC):
@@ -106,3 +113,40 @@ class BaseExtractor(ABC):
     def close(self) -> None:
         """Close MongoDB connection."""
         self.client.close()
+
+    def dump_collection_if_exists(
+        self, dump_dir: str, filename_prefix: str | None = None
+    ) -> str | None:
+        """
+        Dump the current collection to a BSON file if it has documents.
+
+        Parameters
+        ----------
+        dump_dir : str
+            Directory where the dump file will be written.
+        filename_prefix : str, optional
+            File prefix for the dump file name.
+        """
+        if not dump_dir:
+            return None
+
+        try:
+            count = self.collection.estimated_document_count()
+        except PyMongoError:
+            count = self.collection.count_documents({})
+
+        if count == 0:
+            return None
+
+        Path(dump_dir).mkdir(parents=True, exist_ok=True)
+        timestamp = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
+        prefix = filename_prefix or self.collection_name
+        file_path = os.path.join(dump_dir, f"{prefix}_{timestamp}.bson")
+
+        self.logger.info(f"Dumping {count} docs from {self.collection_name} to {file_path}...")
+        with open(file_path, "wb") as handle:
+            cursor = self.collection.find({})
+            for doc in cursor:
+                handle.write(BSON.encode(doc))
+
+        return file_path

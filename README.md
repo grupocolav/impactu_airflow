@@ -5,7 +5,7 @@
 [![Validate and Test DAGs](https://github.com/omazapa/impactu_airflow/actions/workflows/deploy.yml/badge.svg)](https://github.com/omazapa/impactu_airflow/actions/workflows/deploy.yml)
 # ImpactU Airflow ETL
 
-Central repository for Apache Airflow DAGs and ETL (Extraction, Transformation, and Loading) processes for the ImpactU project. This package includes the full logic for data orchestration, source extraction, and data processing.
+Central repository for Apache Airflow DAGs and ETL (Capture, Transformation, and Loading) processes for the ImpactU project. This package includes the full logic for data orchestration and data processing.
 
 ## 🚀 Description
 This project orchestrates data collection from various scientific and academic sources, its processing using the [Kahi](https://github.com/colav/Kahi) tool, and its subsequent loading into query systems such as MongoDB and Elasticsearch.
@@ -29,10 +29,9 @@ pip install -e .
 The repository is organized by data lifecycle stages and Airflow components:
 
 *   `dags/`: Apache Airflow DAG definitions.
-*   `extract/`: Extraction logic for sources like OpenAlex, ORCID, ROR, etc.
+*   `extract/`: Shared extraction base classes and source-specific modules that still run outside capture DAGs.
 *   `transform/`: Transformation and normalization processes (Kahi).
 *   `load/`: Loading scripts to final destinations (MongoDB, Elasticsearch).
-*   `impactu/`: Core utilities and shared logic for the project.
 *   `deploys/`: Deployment logic for external services (APIs, databases) via DAGs.
 *   `backups/`: Database backup automation via DAGs.
 *   `tests/`: Integration, unit, and data quality tests.
@@ -45,7 +44,7 @@ To maintain consistency in the Airflow interface, we follow this convention:
 
 | Type | Format | Example |
 | :--- | :--- | :--- |
-| **Extraction** | `extract_{source}` | `extract_openalex` |
+| **Capture** | `{source}_capture` | `doaj_capture` |
 | **Transformation** | `transform_{entity}` | `transform_sources` |
 | **Loading** | `load_{db}_{env}` | `load_mongodb_production` |
 | **Deployment** | `deploy_{service}_{env}` | `deploy_mongodb_production` |

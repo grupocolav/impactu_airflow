@@ -305,7 +305,7 @@ class ScimagoJRExtractor(BaseExtractor):
                 f"Year {year}: Found fewer records ({actual_count}) than expected ({expected_count})."
             )
 
-    def run(
+    def run(  # type: ignore[override]
         self,
         start_year: int,
         end_year: int,

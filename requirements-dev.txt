@@ -1,4 +1,7 @@
 ruff>=0.8.0
-mypy>=1.13.0
+mypy>=1.15.0
 pre-commit>=3.0.0
 types-requests
+google-auth>=2.35.0
+google-api-python-client>=2.151.0
+mongomock>=4.2.0

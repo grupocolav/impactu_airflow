@@ -1,20 +1,23 @@
+from typing import Any, cast
 from unittest.mock import MagicMock, patch
 
 import mongomock
 import pytest
+from mongomock.collection import BulkOperationBuilder
 
 from extract.scimagojr.scimagojr_extractor import ScimagoJRExtractor
 
 # Workaround for mongomock bug with pymongo 4.x bulk_write
 # https://github.com/mongomock/mongomock/issues/812
-if hasattr(mongomock.collection.BulkOperationBuilder, "add_update"):
-    original_add_update = mongomock.collection.BulkOperationBuilder.add_update
+_builder_cls = cast(Any, BulkOperationBuilder)
+if hasattr(_builder_cls, "add_update"):
+    original_add_update = _builder_cls.add_update
 
     def patched_add_update(self, filter, doc, upsert=False, multi=False, **kwargs):
         kwargs.pop("sort", None)
         return original_add_update(self, filter, doc, upsert, multi, **kwargs)
 
-    mongomock.collection.BulkOperationBuilder.add_update = patched_add_update
+    _builder_cls.add_update = patched_add_update
 
 
 @pytest.fixture
@@ -43,7 +46,7 @@ def test_extractor_initialization(extractor):
 @patch("requests.get")
 def test_fetch_year(mock_get, extractor):
     # Mock CSV response
-    csv_content = "Rank;Sourceid;Title;Type;Issn;SJR;SJR Best Quartile;H index;Total Docs. (2023);Total Docs. (3years);Total Refs.;Total Cites (3years);Citable Docs. (3years);Cites / Doc. (2years);Ref. / Doc.;Country;Region;Publisher;Coverage;Categories\n1;12345;Journal of Tests;journal;12345678;1.5;Q1;50;100;300;5000;1000;280;3.5;50.0;Colombia;Latin America;Test Publisher;2020-2023;Test Category"
+    csv_content = "Rank;Sourceid;Title;Type;Issn;SJR;SJR Best Quartile;H index;Total Docs. (2023);Total Docs. (3years);Total Refs.;Total Cites (3years);Citable Docs. (3years);Cites / Doc. (2years);Ref. / Doc.;Country;Region;Publisher;Coverage;Categories\n1;12345;Journal of Tests;journal;12345678;1.5;Q1;50;100;300;5000;1000;280;3.5;50.0;Colombia;Latin America;Test Publisher;2020-2023;Test Category"  # noqa E501
 
     mock_response = MagicMock()
     mock_response.status_code = 200

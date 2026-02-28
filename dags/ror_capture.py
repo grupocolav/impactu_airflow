@@ -16,7 +16,7 @@ import os
 import re
 import zipfile
 from datetime import datetime
-from typing import Any
+from typing import Any, cast
 
 import requests
 from airflow import DAG
@@ -60,7 +60,7 @@ def download_ror_to_path(record_id: int = 18260365) -> dict[str, Any]:
         status_forcelist=(429, 500, 502, 503, 504),
         allowed_methods=("GET", "POST"),
     )
-    session.mount("https://", HTTPAdapter(max_retries=retries))
+    session.mount("https://", HTTPAdapter(max_retries=cast(Any, retries)))
 
     res = session.get(api_url, timeout=30)
     res.raise_for_status()

@@ -12,6 +12,9 @@ AIRFLOW_HOME="${AIRFLOW_HOME:-$REPO_ROOT}"
 export AIRFLOW_HOME
 export AIRFLOW__CORE__LOAD_EXAMPLES="False"
 PORT="${AIRFLOW_PORT:-8080}"
+# Airflow 3 workers call the Execution API. If UI/API port is customized,
+# point workers to the same port to avoid queued->failed "state mismatch".
+export AIRFLOW__CORE__EXECUTION_API_SERVER_URL="${AIRFLOW__CORE__EXECUTION_API_SERVER_URL:-http://localhost:${PORT}/execution/}"
 
 mkdir -p "$AIRFLOW_HOME"
 mkdir -p "$AIRFLOW_HOME/logs"
@@ -23,6 +26,10 @@ fi
 
 # Ensure a local MongoDB connection exists for DAGs that expect `mongodb_default`.
 # This is safe to run multiple times; the command will succeed or be ignored.
+if airflow connections get mongodb_default -o json 2>/dev/null | grep -q '"conn_type": "mongodb"'; then
+  echo "Recreating mongodb_default with conn_type=mongo (was mongodb)..."
+  airflow connections delete mongodb_default || true
+fi
 airflow connections add mongodb_default --conn-type mongo --conn-host localhost --conn-port 27017 || \
   airflow connections add mongodb_default --conn-uri "mongodb://localhost:27017" || true
 

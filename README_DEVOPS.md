@@ -29,7 +29,7 @@ To enable automatic synchronization and ensure that internal dependencies (such 
 **Note:** We use `"subdir": "."` so that the repository root is added to the `PYTHONPATH`, allowing DAGs to import modules from other folders. An `.airflowignore` file is included to prevent Airflow from attempting to process folders that do not contain DAGs.
 
 ```bash
-AIRFLOW__DAG_PROCESSOR__DAG_BUNDLE_CONFIG_LIST='[
+AIRFLOW__DAG_PROCESSOR__DAG_BUNDLE_CONFIG_list='[
     {
         "name": "impactu_prod",
         "classpath": "airflow.providers.git.bundles.git.GitDagBundle",
@@ -68,9 +68,11 @@ The `.github/workflows/deploy.yml` file manages the lifecycle:
 - `PYPI_PASSWORD`: PyPI API token for publishing the package.
 - `AIRFLOW_API_TOKEN`: Bearer token for CI to trigger validations on the Development server.
 - `GH_TOKEN_PR_VALIDATOR`: GitHub Token (Personal Access Token) with read permissions for the validator DAG to download PR files.
+- `GDRIVE_TOKEN_PICKLE_B64`: **Base64-encoded** Google Drive credentials pickle used by capture DAGs that read from Drive (e.g., `dags/staff_capture.py`, `dags/ciarp_capture.py`).  
+  **Runtime rule**: the Airflow environment must decode this secret and write it to a file path available to tasks (e.g., `/path/to/pickle_file`). The pickle file must **never** be committed to the repository.
 
 ### Airflow (Runtime)
-- **Variables**: Non-sensitive configurations (e.g., `scimagojr_cache_dir`).
+- **Variables**: Non-sensitive configurations (e.g., `scimagojr_cache_dir`, `staff_cache_dir`, `staff_drive_root_folder_id`, `ciarp_drive_root_folder_id`).
 - **Connections**: Database credentials (MongoDB, Postgres) and APIs. **Never** hardcode credentials in the code.
 
 ## 6. Monitoring and Maintenance

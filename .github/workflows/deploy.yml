@@ -10,6 +10,7 @@ on:
       - 'dags/**'
       - 'impactu/**'
       - 'requirements.txt'
+      - 'requirements-dev.txt'
       - 'pyproject.toml'
   pull_request:
     branches: [ "main" ]
@@ -30,7 +31,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install ruff mypy
+          pip install -r requirements-dev.txt
 
       - name: Run Ruff linter
         run: ruff check .

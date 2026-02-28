@@ -18,6 +18,7 @@ dependencies = [
     "apache-airflow-providers-mongo>=5.3.0",
     "pymongo>=4.15.5",
     "pandas>=2.1.4",
+    "openpyxl>=3.1.2",
     "requests>=2.32.5",
     "oxomoc @ git+https://github.com/colav/oxomoc.git@main",
 ]
@@ -56,6 +57,9 @@ ignore = [
 
 [tool.mypy]
 python_version = "3.12"
+mypy_path = "."
+namespace_packages = true
+explicit_package_bases = true
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false
@@ -63,16 +67,21 @@ disallow_incomplete_defs = false
 check_untyped_defs = true
 no_implicit_optional = true
 warn_redundant_casts = true
-warn_unused_ignores = true
+warn_unused_ignores = false
 warn_no_return = true
 
 [[tool.mypy.overrides]]
 module = [
     "airflow.*",
+    "bson.*",
+    "google.*",
+    "googleapiclient.*",
+    "urllib3.*",
     "pandas.*",
     "pymongo.*",
     "requests.*",
     "oxomoc.*",
+    "yuku.*",
     "lxml.*",
     "pytest.*",
     "mongomock.*",
