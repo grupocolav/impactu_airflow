@@ -152,17 +152,18 @@ def run_plugin_with_backup(
     plugin_name: str,
     workflow_yaml_path: str,
     backup_dir: str,
+    plugin_index: int = 0,
     **kwargs: Any,
 ) -> None:
     """Execute a single Kahi plugin with backup / restore protection.
 
-    1. ``mongodump`` the target database.
+    1. ``mongodump`` the target database (skipped for the first plugin).
     2. Run the plugin via the ``Kahi`` orchestrator.
-    3. On failure: ``mongorestore --drop`` from the backup, then re-raise so
-       Airflow marks the task as **failed**.
+    3. On failure (not the first plugin): ``mongorestore --drop`` from the
+       backup, then re-raise so Airflow marks the task as **failed**.
 
-    Because every downstream task uses ``trigger_rule="all_done"`` the pipeline
-    continues to the next plugin even when the current one fails.
+    The first plugin (``plugin_index == 0``) skips backup/restore because
+    there is no previous plugin state to protect.
     """
     config, workflow = _parse_workflow(workflow_yaml_path)
 
@@ -178,9 +179,13 @@ def run_plugin_with_backup(
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     archive = os.path.join(backup_dir, f"{safe}_{ts}.archive.gz")
 
-    # ── 1. Backup ──────────────────────────────────────────────────────────
-    log.info("▶ Backing up '%s' before plugin '%s'", db_name, plugin_name)
-    _mongodump(mongo_uri, db_name, archive)
+    # ── 1. Backup (skip for first plugin) ──────────────────────────────────
+    should_backup = plugin_index > 0
+    if should_backup:
+        log.info("▶ Backing up '%s' before plugin '%s'", db_name, plugin_name)
+        _mongodump(mongo_uri, db_name, archive)
+    else:
+        log.info("▶ First plugin — skipping backup")
 
     # ── 2. Run the plugin ──────────────────────────────────────────────────
     try:
@@ -223,16 +228,25 @@ def run_plugin_with_backup(
         log.info("✔ Plugin '%s' completed successfully", plugin_name)
 
     except Exception:
-        # ── 3. Restore on failure ──────────────────────────────────────────
-        log.exception("✘ Plugin '%s' failed — restoring database from backup", plugin_name)
-        try:
-            _mongorestore(mongo_uri, db_name, archive)
-            log.info("✔ Database restored after '%s' failure", plugin_name)
-        except Exception:
-            log.critical(
-                "CRITICAL — could not restore DB after '%s' failure",
+        # ── 3. Restore on failure (skip for first plugin) ──────────────────
+        if should_backup:
+            log.exception(
+                "✘ Plugin '%s' failed — restoring database from backup",
                 plugin_name,
-                exc_info=True,
+            )
+            try:
+                _mongorestore(mongo_uri, db_name, archive)
+                log.info("✔ Database restored after '%s' failure", plugin_name)
+            except Exception:
+                log.critical(
+                    "CRITICAL — could not restore DB after '%s' failure",
+                    plugin_name,
+                    exc_info=True,
+                )
+        else:
+            log.exception(
+                "✘ Plugin '%s' failed (first plugin — no restore)",
+                plugin_name,
             )
         # Re-raise so Airflow marks the task as FAILED
         raise
@@ -283,11 +297,10 @@ with DAG(
             python_callable=run_plugin_with_backup,
             op_kwargs={
                 "plugin_name": plugin_name,
+                "plugin_index": idx,
                 "workflow_yaml_path": "{{ params.workflow_yaml }}",
                 "backup_dir": "{{ params.backup_dir }}",
             },
-            # all_done → execute even if the previous plugin failed
-            trigger_rule="all_done" if prev_task else "all_success",
         )
         if prev_task:
             prev_task >> task
