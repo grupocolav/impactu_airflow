@@ -169,6 +169,12 @@ airflow connections add mongodb_default --conn-type mongo --conn-host localhost 
 if [[ -n "${GOOGLE_TOKEN_PICKLE:-}" ]]; then
     airflow variables set google_token_pickle "$GOOGLE_TOKEN_PICKLE" || true
 fi
+if [[ -n "${CIARP_DRIVE_ROOT_FOLDER_ID:-}" ]]; then
+    airflow variables set ciarp_drive_root_folder_id "$CIARP_DRIVE_ROOT_FOLDER_ID" || true
+fi
+if [[ -n "${STAFF_DRIVE_ROOT_FOLDER_ID:-}" ]]; then
+    airflow variables set staff_drive_root_folder_id "$STAFF_DRIVE_ROOT_FOLDER_ID" || true
+fi
 
 if airflow standalone --help >/dev/null 2>&1; then
     echo "Running 'airflow standalone'. Press Ctrl+C to stop."

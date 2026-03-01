@@ -575,7 +575,7 @@ with DAG(
     "doaj_capture",
     default_args=default_args,
     description="Capture DOAJ public data dumps (journals and articles) into MongoDB",
-    schedule=Variable.get("doaj_schedule", default_var="@monthly"),
+    schedule="@monthly",
     catchup=False,
     is_paused_upon_creation=True,
     tags=["capture", "doaj"],

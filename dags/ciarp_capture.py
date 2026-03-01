@@ -531,8 +531,10 @@ def run_ciarp_capture(**kwargs: Any) -> None:
             if value not in (None, ""):
                 params[key] = value
 
-    drive_root_folder_id = params.get("drive_root_folder_id") or Variable.get(
-        "ciarp_drive_root_folder_id", default_var=""
+    drive_root_folder_id = (
+        params.get("drive_root_folder_id")
+        or Variable.get("ciarp_drive_root_folder_id", default_var="")
+        or os.environ.get("CIARP_DRIVE_ROOT_FOLDER_ID", "")
     )
     drive_subfolder_name = params.get("drive_subfolder_name") or Variable.get(
         "ciarp_drive_subfolder_name", default_var="ciarp"
@@ -541,7 +543,7 @@ def run_ciarp_capture(**kwargs: Any) -> None:
     google_token_pickle = (
         params.get("google_token_pickle")
         or Variable.get("google_token_pickle", default_var="")
-        or os.environ.get("GOOGLE_TOKEN_PICKLE")
+        or os.environ.get("GOOGLE_TOKEN_PICKLE", "")
     )
     cache_dir = params.get("cache_dir", "/tmp/impactu_airflow_cache/ciarp")
 
