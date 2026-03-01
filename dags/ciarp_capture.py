@@ -587,6 +587,7 @@ with DAG(
     description="Capture CIARP files from Google Drive and load into MongoDB",
     schedule="0 3 * * 1",
     catchup=False,
+    is_paused_upon_creation=True,
     tags=["capture", "ciarp"],
     params={
         "drive_root_folder_id": Param(

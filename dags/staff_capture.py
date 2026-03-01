@@ -512,6 +512,7 @@ with DAG(
     description="Capture staff files from Google Drive and load into MongoDB",
     schedule="0 2 * * 1",
     catchup=False,
+    is_paused_upon_creation=True,
     tags=["capture", "staff"],
     params={
         "drive_root_folder_id": Param(

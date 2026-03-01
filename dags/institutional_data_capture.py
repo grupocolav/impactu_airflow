@@ -22,6 +22,7 @@ with DAG(
     render_template_as_native_obj=True,
     schedule=None,
     catchup=False,
+    is_paused_upon_creation=True,
     tags=["capture", "institutional"],
     params={
         "google_token_pickle": Param(

@@ -531,7 +531,7 @@ def run_doaj_capture(**kwargs: Any) -> None:
         )
         year, semester = _compute_period(logical_date)
 
-    db_name = f"doaj_{year}_{semester}"
+    db_name = params.get("mongo_db") or "doaj"
 
     hook = MongoHook(mongo_conn_id="mongodb_default")
     client = hook.get_conn()
@@ -577,12 +577,18 @@ with DAG(
     description="Capture DOAJ public data dumps (journals and articles) into MongoDB",
     schedule=Variable.get("doaj_schedule", default_var="@monthly"),
     catchup=False,
+    is_paused_upon_creation=True,
     tags=["capture", "doaj"],
     params={
         "api_key": Param(
             "",
             type="string",
             description="DOAJ API key (overrides Airflow Variables)",
+        ),
+        "mongo_db": Param(
+            "doaj",
+            type="string",
+            description="MongoDB database name for DOAJ data",
         ),
         "download_journals": Param(
             True,

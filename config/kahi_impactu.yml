@@ -7,7 +7,7 @@ config:
 workflow:
   doaj_sources:
     database_url: localhost:27017
-    database_name: doaj_2026_1
+    database_name: doaj
     collection_name: stage
     verbose: 4
   scimago_sources:
@@ -33,22 +33,22 @@ workflow:
     database_url: localhost:27017
     database_name: openalexco
     collection_name: sources
-    num_jobs: 72
+    num_jobs: 10
   openalex_subjects:
     database_url: localhost:27017
     database_name: openalexco
     collection_name: concepts
-    num_jobs: 72
+    num_jobs: 10
   ror_affiliations:
     database_url: localhost:27017
-    database_name: ror_2025_2
-    collection_name: stage
-    num_jobs: 72
+    database_name: ror
+    collection_name: ror_stage
+    num_jobs: 10
   openalex_affiliations:
     database_url: localhost:27017
     database_name: openalexco
     collection_name: institutions
-    num_jobs: 72
+    num_jobs: 10
   staff_affiliations:
     databases:
       - institution_id: https://ror.org/03bp5hc83 #Universidad de Antioquia (could be any external id ex: ROR_ID, GRID_ID, etc)
@@ -63,7 +63,7 @@ workflow:
   wikidata_affiliations:
     database_name: wikidata #i did the run over the full wikidata
     collection_name: data
-    num_jobs: 72
+    num_jobs: 10
     verbose: 4
   scienti_affiliations:
     databases:
@@ -82,9 +82,9 @@ workflow:
     verbose: 4
   minciencias_opendata_affiliations:
       database_url: localhost:27017
-      database_name: yuku_2025_2
+      database_name: dam
       collection_name: gruplac_groups_data
-      num_jobs: 72
+      num_jobs: 10
       verbose: 4
   staff_person:
     databases:
@@ -119,7 +119,7 @@ workflow:
      verbose: 2
   minciencias_opendata_person:
     database_url: localhost:27017
-    database_name: yuku_2025_2
+    database_name: dam
     researchers: cvlac_data
     cvlac: cvlac_stage
     groups_production: gruplac_production_data
@@ -132,16 +132,16 @@ workflow:
     database_name: openalexco
     collection_name: authors
     collection_name_works: works # required for related works
-    num_jobs: 72
+    num_jobs: 10
     verbose: 4
   orcid_person:
-    num_jobs: 72
+    num_jobs: 10
     verbose: 2
     database_url: localhost:27017
     database_name: orcid
     collection_name: summaries
   scholar_person:
-    num_jobs: 72
+    num_jobs: 10
     verbose: 4
     database_url: localhost:27017
     database_name: scholar_colombia_2024
@@ -194,7 +194,7 @@ workflow:
        - database_url: localhost:27017
          database_name: scienti_univalle_2024
          collection_name: product
-     num_jobs: 72
+     num_jobs: 10
      verbose: 1
   ciarp_works/doi:
      databases:
@@ -212,12 +212,12 @@ workflow:
      database_url: localhost:27017
      database_name: scholar_colombia_2024
      collection_name: stage
-     num_jobs: 72
+     num_jobs: 10
      verbose: 5
   dspace_works/doi:
       database_url: localhost:27017
       database_name: oxomoc_colombia
-      num_jobs: 72
+      num_jobs: 10
       verbose: 0
       repositories:
         - institution_id: 'https://ror.org/00gm52g34' # COLEGIO DE ESTUDIOS SUPERIORES DE ADMINISTRACION-CESA-
@@ -298,7 +298,7 @@ workflow:
         - institution_id: 'https://ror.org/00s9vmn82' # TECNOLOGICO DE ANTIOQUIA
           collection_name: dspace_tdea_records
           repository_url: https://dspace.tdea.edu.co
-        - institution_id: 'https://ror.org/03zb5p722' # INSTITUTO TECNOLOGICO METROPOLITANO
+        - institution_id: 'https://ror.org/03zb5p102' # INSTITUTO TECNOLOGICO METROPOLITANO
           collection_name: dspace_itm_records
           repository_url: https://repositorio.itm.edu.co
         - institution_id: 'https://ror.org/042335e16' # UNIVERSIDAD DE LOS LLANOS
@@ -487,7 +487,7 @@ workflow:
         - institution_id: 'https://ror.org/03e79yx85' # INSTITUTO TOLIMENSE DE FORMACION TECNICA PROFESIONAL
           collection_name: dspace_itfip_records
           repository_url: https://repositorio.itfip.edu.co
-        - institution_id: 'https://ror.org/02vbtzd72' # UNIVERSIDAD SANTO TOMAS
+        - institution_id: 'https://ror.org/02vbtzd10' # UNIVERSIDAD SANTO TOMAS
           collection_name: dspace_usta_records
           repository_url: https://repository.usta.edu.co
         - institution_id: 'https://ror.org/04td15k45' # UNIVERSIDAD COOPERATIVA DE COLOMBIA
@@ -546,7 +546,7 @@ workflow:
     database_url: localhost:27017
     database_name: openalexco
     collection_name: works
-    num_jobs: 72
+    num_jobs: 10
     es_index: kahi_es_works
     es_url: http://localhost:9200
     es_user: elastic
@@ -572,7 +572,7 @@ workflow:
       - database_url: localhost:27017
         database_name: scienti_univalle_2024
         collection_name: product
-    num_jobs: 72
+    num_jobs: 10
     verbose: 2
   ciarp_works:
     es_index: kahi_es_works
@@ -598,7 +598,7 @@ workflow:
     es_url: http://localhost:9200
     es_user: elastic
     es_password: colav
-    num_jobs: 72
+    num_jobs: 10
     verbose: 2
   minciencias_opendata_works:
     es_index: kahi_es_works
@@ -606,15 +606,15 @@ workflow:
     es_user: elastic
     es_password: colav
     database_url: localhost:27017
-    database_name: yuku_2025_2
+    database_name: dam
     collection_name: gruplac_production_data
     insert_all: True
-    num_jobs: 72
+    num_jobs: 10
     verbose: 1
   dspace_works:
       database_url: localhost:27017
       database_name: oxomoc_colombia
-      num_jobs: 72
+      num_jobs: 10
       verbose: 0
       es_index: kahi_es_works
       es_url: http://localhost:9200
@@ -700,7 +700,7 @@ workflow:
         - institution_id: 'https://ror.org/00s9vmn82' # TECNOLOGICO DE ANTIOQUIA
           collection_name: dspace_tdea_records
           repository_url: https://dspace.tdea.edu.co
-        - institution_id: 'https://ror.org/03zb5p722' # INSTITUTO TECNOLOGICO METROPOLITANO
+        - institution_id: 'https://ror.org/03zb5p102' # INSTITUTO TECNOLOGICO METROPOLITANO
           collection_name: dspace_itm_records
           repository_url: https://repositorio.itm.edu.co
         - institution_id: 'https://ror.org/042335e16' # UNIVERSIDAD DE LOS LLANOS
@@ -889,7 +889,7 @@ workflow:
         - institution_id: 'https://ror.org/03e79yx85' # INSTITUTO TOLIMENSE DE FORMACION TECNICA PROFESIONAL
           collection_name: dspace_itfip_records
           repository_url: https://repositorio.itfip.edu.co
-        - institution_id: 'https://ror.org/02vbtzd72' # UNIVERSIDAD SANTO TOMAS
+        - institution_id: 'https://ror.org/02vbtzd10' # UNIVERSIDAD SANTO TOMAS
           collection_name: dspace_usta_records
           repository_url: https://repository.usta.edu.co
         - institution_id: 'https://ror.org/04td15k45' # UNIVERSIDAD COOPERATIVA DE COLOMBIA
@@ -931,19 +931,19 @@ workflow:
 ## aditional entities
   minciencias_opendata_events:
      database_url: localhost:27017
-     database_name: yuku_2025_2
+     database_name: dam
      collection_name: gruplac_production_data
-     num_jobs: 72
+     num_jobs: 10
      verbose: 1
   minciencias_opendata_projects:
      database_url: localhost:27017
-     database_name: yuku_2025_2
+     database_name: dam
      collection_name: gruplac_production_data
-     num_jobs: 72
+     num_jobs: 10
      verbose: 1
   minciencias_opendata_patents:
      database_url: localhost:27017
-     database_name: yuku_2025_2
+     database_name: dam
      collection_name: gruplac_production_data
      num_jobs: 1
      verbose: 1
@@ -956,12 +956,12 @@ workflow:
   post_person_work_cleaning:
      verbose: 2
   post_cleanup_entities: # run this after all works plugins are done
-     num_jobs: 72
+     num_jobs: 10
      verbose: 2
    #post calculations
   impactu_post_cites_count:
     verbose: 2
-    num_jobs: 72
+    num_jobs: 10
   impactu_postcalculations:
     database_url: localhost:27017
     database_name: kahi_calculations_dev
@@ -969,6 +969,6 @@ workflow:
     openalex_database_name: openalexco
     inference_endpoint: http://localhost:8080/invocations
     backend: "multiprocessing"
-    n_jobs: 72
+    n_jobs: 10
     verbose: 2
     author_count: 10 #use this with warning, maybe the network is too big and it can not be saved in MongoDB

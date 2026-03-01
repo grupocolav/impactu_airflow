@@ -66,6 +66,7 @@ with DAG(
     description="Extract data from ScimagoJR and load into MongoDB",
     schedule="@monthly",
     catchup=False,
+    is_paused_upon_creation=True,
     tags=["extract", "scimagojr"],
     params={
         "mongo_conn_id": Param("mongodb_default", type="string", description="Mongo connection id"),

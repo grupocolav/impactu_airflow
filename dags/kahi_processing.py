@@ -91,8 +91,54 @@ def _build_mongo_uri(config: dict) -> str:
     return url
 
 
-def _mongodump(uri: str, db_name: str, archive_path: str) -> None:
-    """Run ``mongodump`` and raise on failure."""
+# ── Plugin → target collection mapping ─────────────────────────────────────
+# The suffix of the plugin name tells us which MongoDB collection it writes to.
+# This lets us backup/restore only the affected collection instead of the full DB.
+_PLUGIN_COLLECTION_MAP: dict[str, str] = {
+    "sources": "sources",
+    "subjects": "subjects",
+    "affiliations": "affiliations",
+    "person": "person",
+    "works": "works",
+    "events": "events",
+    "projects": "projects",
+    "patents": "patents",
+}
+
+
+def _collection_for_plugin(plugin_name: str) -> str | None:
+    """Return the target collection name for a plugin, or *None* if unknown.
+
+    Resolution order:
+    1. Exact suffix match after the last ``_`` (e.g. ``doaj_sources`` → ``sources``).
+    2. Check if any known collection keyword appears in the name.
+    3. Special-case plugins that don't follow the convention.
+    """
+    base = plugin_name.split("/")[0]  # strip /doi, /delete, /bulk_insert etc.
+
+    # 1. Suffix match
+    last_part = base.rsplit("_", 1)[-1]
+    if last_part in _PLUGIN_COLLECTION_MAP:
+        return _PLUGIN_COLLECTION_MAP[last_part]
+
+    # 2. Keyword match (e.g. "elasticsearch_works" → "works")
+    for keyword, collection in _PLUGIN_COLLECTION_MAP.items():
+        if keyword in base:
+            return collection
+
+    # 3. Special cases
+    special = {
+        "unicity_person": "person",
+        "post_person_work_cleaning": "person",
+        "post_cleanup_entities": None,  # touches multiple collections
+        "impactu_post_cites_count": "works",
+        "impactu_postcalculations": None,  # touches multiple collections
+    }
+    return special.get(base)
+
+
+def _mongodump(uri: str, db_name: str, archive_path: str, collection: str | None = None) -> None:
+    """Run ``mongodump`` for the whole DB or a single collection."""
     os.makedirs(os.path.dirname(archive_path), exist_ok=True)
     cmd = [
         "mongodump",
@@ -101,28 +147,35 @@ def _mongodump(uri: str, db_name: str, archive_path: str) -> None:
         f"--archive={archive_path}",
         "--gzip",
     ]
-    log.info("mongodump → %s", archive_path)
+    if collection:
+        cmd.append(f"--collection={collection}")
+    target = f"{db_name}.{collection}" if collection else db_name
+    log.info("mongodump [%s] → %s", target, archive_path)
     res = subprocess.run(cmd, capture_output=True, text=True, timeout=7200)
     if res.returncode != 0:
         raise RuntimeError(f"mongodump failed (rc={res.returncode}): {res.stderr}")
     log.info("Backup created: %s", archive_path)
 
 
-def _mongorestore(uri: str, db_name: str, archive_path: str) -> None:
-    """Run ``mongorestore --drop`` and raise on failure."""
+def _mongorestore(uri: str, db_name: str, archive_path: str, collection: str | None = None) -> None:
+    """Run ``mongorestore --drop`` for the whole DB or a single collection."""
     cmd = [
         "mongorestore",
         f"--uri={uri}",
         f"--archive={archive_path}",
         "--gzip",
         "--drop",
-        f"--nsInclude={db_name}.*",
     ]
-    log.info("mongorestore ← %s", archive_path)
+    if collection:
+        cmd.extend([f"--nsInclude={db_name}.{collection}"])
+    else:
+        cmd.extend([f"--nsInclude={db_name}.*"])
+    target = f"{db_name}.{collection}" if collection else db_name
+    log.info("mongorestore [%s] ← %s", target, archive_path)
     res = subprocess.run(cmd, capture_output=True, text=True, timeout=7200)
     if res.returncode != 0:
         raise RuntimeError(f"mongorestore failed (rc={res.returncode}): {res.stderr}")
-    log.info("Database '%s' restored from %s", db_name, archive_path)
+    log.info("Collection '%s' restored from %s", target, archive_path)
 
 
 def _setup_kahi_paths() -> None:
@@ -169,21 +222,28 @@ def run_plugin_with_backup(
 
     if plugin_name not in workflow:
         raise ValueError(
-            f"Plugin '{plugin_name}' not found in workflow YAML " f"({workflow_yaml_path})"
+            f"Plugin '{plugin_name}' not found in workflow YAML ({workflow_yaml_path})"
         )
 
     db_name = config["database_name"]
     mongo_uri = _build_mongo_uri(config)
+    target_collection = _collection_for_plugin(plugin_name)
 
     safe = plugin_name.replace("/", "__")
+    col_tag = target_collection or "full"
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    archive = os.path.join(backup_dir, f"{safe}_{ts}.archive.gz")
+    archive = os.path.join(backup_dir, f"{safe}_{col_tag}_{ts}.archive.gz")
 
-    # ── 1. Backup (skip for first plugin) ──────────────────────────────────
+    # ── 1. Backup (skip for first plugin in each parallel lane) ────────────
     should_backup = plugin_index > 0
     if should_backup:
-        log.info("▶ Backing up '%s' before plugin '%s'", db_name, plugin_name)
-        _mongodump(mongo_uri, db_name, archive)
+        log.info(
+            "▶ Backing up '%s.%s' before plugin '%s'",
+            db_name,
+            target_collection or "*",
+            plugin_name,
+        )
+        _mongodump(mongo_uri, db_name, archive, collection=target_collection)
     else:
         log.info("▶ First plugin — skipping backup")
 
@@ -235,8 +295,8 @@ def run_plugin_with_backup(
                 plugin_name,
             )
             try:
-                _mongorestore(mongo_uri, db_name, archive)
-                log.info("✔ Database restored after '%s' failure", plugin_name)
+                _mongorestore(mongo_uri, db_name, archive, collection=target_collection)
+                log.info("✔ Collection restored after '%s' failure", plugin_name)
             except Exception:
                 log.critical(
                     "CRITICAL — could not restore DB after '%s' failure",
@@ -277,7 +337,8 @@ with DAG(
     dag_id="kahi_processing",
     default_args=_default_args,
     description=(
-        "Run Kahi ETL plugins sequentially with per-step " "MongoDB backup/restore protection"
+        "Run Kahi ETL plugins with parallel sources/subjects/affiliations "
+        "and sequential person→works→post phases"
     ),
     schedule=None,
     catchup=False,
@@ -288,20 +349,72 @@ with DAG(
         "backup_dir": DEFAULT_BACKUP_DIR,
     },
 ) as dag:
-    prev_task = None
+    # ── Classify plugins into parallel lanes and sequential tail ────────
+    # sources, subjects and affiliations run as 3 parallel chains (internal
+    # order preserved).  From the first *_person plugin onward everything is
+    # strictly sequential.
+    _PARALLEL_SUFFIXES = ("_sources", "_subjects", "_affiliations")
 
-    for idx, plugin_name in enumerate(_plugins):
-        safe_id = plugin_name.replace("/", "__")
-        task = PythonOperator(
+    parallel_lanes: dict[str, list[str]] = {}
+    sequential_plugins: list[str] = []
+    _hit_person = False
+
+    for p in _plugins:
+        if _hit_person:
+            sequential_plugins.append(p)
+            continue
+        if "_person" in p:
+            _hit_person = True
+            sequential_plugins.append(p)
+            continue
+        # Determine lane by suffix
+        lane = None
+        for suffix in _PARALLEL_SUFFIXES:
+            if p.endswith(suffix):
+                lane = suffix.lstrip("_")
+                break
+        if lane is None:
+            # Fallback: put unknown early plugins into a generic lane
+            lane = "other"
+        parallel_lanes.setdefault(lane, []).append(p)
+
+    def _make_task(name: str, idx: int) -> PythonOperator:
+        safe_id = name.replace("/", "__")
+        return PythonOperator(
             task_id=f"{idx:03d}_{safe_id}",
             python_callable=run_plugin_with_backup,
             op_kwargs={
-                "plugin_name": plugin_name,
+                "plugin_name": name,
                 "plugin_index": idx,
                 "workflow_yaml_path": "{{ params.workflow_yaml }}",
                 "backup_dir": "{{ params.backup_dir }}",
             },
         )
-        if prev_task:
-            prev_task >> task
-        prev_task = task
+
+    # Build a global index so task IDs reflect the original YAML order
+    _name_to_idx = {name: i for i, name in enumerate(_plugins)}
+
+    # ── Parallel lanes (sources | subjects | affiliations) ─────────────
+    lane_tails: list[PythonOperator] = []
+
+    for _lane_name, lane_plugins in parallel_lanes.items():
+        prev: PythonOperator | None = None
+        for pname in lane_plugins:
+            t = _make_task(pname, _name_to_idx[pname])
+            if prev:
+                prev >> t
+            prev = t
+        if prev is not None:
+            lane_tails.append(prev)
+
+    # ── Sequential tail (person → works → post) ───────────────────────
+    prev_seq: PythonOperator | None = None
+    for pname in sequential_plugins:
+        t = _make_task(pname, _name_to_idx[pname])
+        if prev_seq is None:
+            # All parallel lanes must finish before the first sequential task
+            for tail in lane_tails:
+                tail >> t
+        else:
+            prev_seq >> t
+        prev_seq = t
