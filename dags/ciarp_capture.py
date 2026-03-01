@@ -594,8 +594,8 @@ with DAG(
     params={
         "drive_root_folder_id": Param(
             "",
-            type="string",
-            description="Google Drive folder ID containing CIARP files",
+            type=["string", "null"],
+            description="Google Drive folder ID (leave empty to use env var CIARP_DRIVE_ROOT_FOLDER_ID)",
         ),
         "drive_subfolder_name": Param(
             "ciarp",
@@ -604,13 +604,13 @@ with DAG(
         ),
         "dump_dir": Param(
             "",
-            type="string",
+            type=["string", "null"],
             description="Optional directory for dumping the ciarp collection before load",
         ),
         "google_token_pickle": Param(
             "",
-            type="string",
-            description="Path to Google Drive credentials pickle file (read-only access)",
+            type=["string", "null"],
+            description="Path to credentials pickle (leave empty to use env var GOOGLE_TOKEN_PICKLE)",
         ),
         "cache_dir": Param(
             "/tmp/impactu_airflow_cache/ciarp",

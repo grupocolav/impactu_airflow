@@ -519,8 +519,8 @@ with DAG(
     params={
         "drive_root_folder_id": Param(
             "",
-            type="string",
-            description="Google Drive root folder ID containing institution subfolders",
+            type=["string", "null"],
+            description="Google Drive root folder ID (leave empty to use env var STAFF_DRIVE_ROOT_FOLDER_ID)",
         ),
         "drive_subfolder_name": Param(
             "staff",
@@ -529,13 +529,13 @@ with DAG(
         ),
         "dump_dir": Param(
             "",
-            type="string",
+            type=["string", "null"],
             description="Optional directory for dumping the staff collection before load",
         ),
         "google_token_pickle": Param(
             "",
-            type="string",
-            description="Path to Google Drive credentials pickle file (read-only access)",
+            type=["string", "null"],
+            description="Path to credentials pickle (leave empty to use env var GOOGLE_TOKEN_PICKLE)",
         ),
         "cache_dir": Param(
             "/tmp/impactu_airflow_cache/staff",
